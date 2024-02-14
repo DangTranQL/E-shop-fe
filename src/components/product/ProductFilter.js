@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { FRadioGroup } from "./form";
-import { ClearAllIcon } from "@mui/icons-material/ClearAll";
+import { FRadioGroup } from "../form";
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 
 export const SORT_BY_CATEGORIES = [
     { value: "electronics", label: "Electronics" },

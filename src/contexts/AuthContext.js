@@ -33,7 +33,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.user,
+        user: action.payload.newUser,
       };
     case LOGOUT:
       return {
@@ -85,7 +85,7 @@ function AuthProvider({ children }) {
 
   const login = async ({email, password}, callback) => {
     const response = await apiService.post('/login', {email, password});
-    const { user, accessToken } = response.data;
+    const { user, accessToken } = response.data.data;
 
     setSession(accessToken);
     dispatch({
@@ -96,14 +96,14 @@ function AuthProvider({ children }) {
     callback();
   };
 
-  const register = async ({username, email, password, address, phone}, callback) => {
-    const response = await apiService.post('/register', {username, email, password, address, phone});
-    const { user, accessToken } = response.data;
+  const register = async ({username, email, password, role, address, phone}, callback) => {
+    const response = await apiService.post('/users', {username, email, password, role, address, phone});
+    const { newUser, accessToken } = response.data.data;
 
     setSession(accessToken);
     dispatch({
       type: REGISTER_SUCCESS,
-      payload: { user },
+      payload: { newUser },
     });
 
     callback();

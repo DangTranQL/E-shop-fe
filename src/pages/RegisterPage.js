@@ -24,6 +24,7 @@ const defaultValues = {
     email: "",
     password: "",
     passwordConfirmation: "",
+    role: "",
     address: "",
     phone: null,
 };
@@ -43,10 +44,10 @@ function RegisterPage() {
     const { handleSubmit, reset, setError, formState: { errors, isSubmitting } } = methods;
 
     const onSubmit = async (data) => {
-        const { username, email, password, address, phone } = data;
+        const { username, email, password, role, address, phone } = data;
 
         try {
-            await auth.register({ username, email, password, address, phone }, () => {
+            await auth.register({ username, email, password, role, address, phone }, () => {
                 navigate("/", { replace: true });
             });
         } catch (error) {
@@ -107,6 +108,7 @@ function RegisterPage() {
                         }}
                     />
 
+                    <FTextField name="role" label="Role" />
                     <FTextField name="address" label="Address" />
                     <FTextField name="phone" label="Phone" type="number" />
 

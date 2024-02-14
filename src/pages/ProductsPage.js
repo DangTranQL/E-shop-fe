@@ -1,68 +1,105 @@
-// show all products
-import { Button, Stack, Typography } from "@mui/material";
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { FormProvider, FTextField } from "../components/form";
+import React, { useState, useEffect} from "react";
+import apiService from "../app/apiService";
+import ProductList from "../components/product/ProductList";
+import ProductSearch from "../components/product/ProductSearch";
+import ProductFilter from "../components/product/ProductFilter";
+import ProductSort from "../components/product/ProductSort";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-
-const ProductSchema = Yup.object().shape({
-    title: Yup.string().required("Title is required"),
-    stocks: Yup.number().required("Stocks is required"),
-    price: Yup.number().required("Price is required"),
-    image: Yup.string().required("Image is required"),
-});
-
-const defaultValues = {
-    title: "",
-    description: "",
-    category: "",
-    stocks: null,
-    price: null,
-    image: "",
-};
+import  orderBy from "lodash";
+import { Alert, Box, Container, Stack } from "@mui/material";
+import { FormProvider } from "../components/form";
+import LoadingScreen from "../components/LoadingScreen";
 
 function ProductsPage() {
-    let navigate = useNavigate();
-    let location = useLocation();
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    const methods = useForm({
-        resolver: yupResolver(ProductSchema),
-        defaultValues,
-    });
-    const { handleSubmit } = methods;
-
-    const onSubmit = async (data) => {
-        let from = location.state?.from?.pathname || "/";
-        let title = data.title;
-        let description = data.description;
-        let category = data.category;
-        let stocks = data.stocks;
-        let price = data.price;
-        let image = data.image;
-
-        console.log(data);
+    const defaultFilter = {
+        category: "All",
+        sortBy: "featured",
+        searchQuery: "",
     };
 
+    const methods = useForm({
+        defaultValues: defaultFilter,
+    });
+
+    const { watch, reset} = methods;
+    const filter = watch();
+    const filterProducts = applyFilter(products, filter);
+
+    useEffect(() => {
+        const getProducts = async () => {
+            setLoading(true);
+            try {
+                const res = await apiService.get("/products");
+                setProducts(res.data);
+            } catch (error) {
+                setError(error.message);
+            }
+            setLoading(false);
+        }
+        getProducts();
+    }, []);
+
     return (
-        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={3} sx={{ minWidth: "350px" }}>
-                <Typography variant="h4" textAlign="center">
-                    Add Product
-                </Typography>
-                <FTextField name="title" label="Title" />
-                <FTextField name="description" label="Description" />
-                <FTextField name="category" label="Category" />
-                <FTextField name="stocks" label="Stocks" type="number" />
-                <FTextField name="price" label="Price" type="number" />
-                <FTextField name="image" label="Image" />
-                <Button type="submit" variant="contained">
-                    Add Product
-                </Button>
-            </Stack>
-        </FormProvider>
-    );
+        <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
+          <Stack>
+            <FormProvider methods={methods}>
+              <ProductFilter resetFilter={reset} />
+            </FormProvider>
+          </Stack>
+          <Stack sx={{ flexGrow: 1 }}>
+            <FormProvider methods={methods}>
+              <Stack
+                spacing={2}
+                direction={{ xs: "column", sm: "row" }}
+                alignItems={{ sm: "center" }}
+                justifyContent="space-between"
+                mb={2}
+              >
+                <ProductSearch />
+                <ProductSort />
+              </Stack>
+            </FormProvider>
+            <Box sx={{ position: "relative", height: 1 }}>
+              {loading ? (
+                <LoadingScreen />
+              ) : (
+                <>
+                  {error ? (
+                    <Alert severity="error">{error}</Alert>
+                  ) : (
+                    <ProductList products={filterProducts} />
+                  )}
+                </>
+              )}
+            </Box>
+          </Stack>
+        </Container>
+      );
+};
+
+function applyFilter (products, filter) {
+    const { sortBy } = filter;
+    let filteredProducts = products;
+
+    // Sort by
+    if (sortBy === "featured") {
+        filteredProducts = orderBy(products, ["sold"], ["desc"]);
+    }
+    if (sortBy === "newest") {
+        filteredProducts = orderBy(products, ["createdAt"], ["desc"]);
+    }
+    if (sortBy === "priceDesc") {
+        filteredProducts = orderBy(products, ["price"], ["desc"]);
+    }
+    if (sortBy === "priceAsc") {
+        filteredProducts = orderBy(products, ["price"], ["asc"]);
+    }
+
+    return filteredProducts;
 }
 
 export default ProductsPage;

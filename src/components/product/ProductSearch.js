@@ -1,7 +1,7 @@
 import { InputAdornment } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
-import { FTextField } from "./form";
+import { FTextField } from "../form";
 
 function ProductSearch() {
   return (
