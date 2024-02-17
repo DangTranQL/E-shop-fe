@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from "@mui/material";
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FormProvider, FTextField } from "../../components/form";
+import { FormProvider, FTextField } from "../../../components/form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";

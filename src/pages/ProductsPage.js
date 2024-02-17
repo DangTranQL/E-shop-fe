@@ -9,8 +9,14 @@ import  orderBy from "lodash";
 import { Alert, Box, Container, Stack } from "@mui/material";
 import { FormProvider } from "../components/form";
 import LoadingScreen from "../components/LoadingScreen";
+import useAuth from "../hooks/useAuth";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import { useNavigate } from "react-router-dom";
 
 function ProductsPage() {
+    const auth = useAuth();
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -30,11 +36,12 @@ function ProductsPage() {
     const filterProducts = applyFilter(products, filter);
 
     useEffect(() => {
+        console.log("UseEffect");
         const getProducts = async () => {
             setLoading(true);
             try {
                 const res = await apiService.get("/products");
-                // console.log("PRODUCTS", res.data.data);
+                console.log("PRODUCTPAGE", res);
                 setProducts(res.data.data);
             } catch (error) {
                 setError(error.message);
@@ -62,6 +69,9 @@ function ProductsPage() {
               >
                 <ProductSearch />
                 <ProductSort />
+                
+                <ShoppingBasketIcon onClick={() => auth?.user ? navigate(`/users/${auth.user._id}/orders`) : navigate('/login') }/>
+                <AccountCircleIcon onClick={() => auth?.user ? navigate(`/users/${auth.user._id}`) : navigate('/login') }/>
               </Stack>
             </FormProvider>
             <Box sx={{ position: "relative", height: 1 }}>

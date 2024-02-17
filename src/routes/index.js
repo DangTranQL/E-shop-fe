@@ -9,19 +9,23 @@ import NotFoundPage from "../pages/NotFoundPage";
 import AuthRequire from "./AuthRequire";
 import RegisterPage from "../pages/RegisterPage";
 import ProductsPage from "../pages/ProductsPage";
+import Profile from "../pages/user/Profile";
+import CartPage from "../pages/user/CartPage";
 
 function Router() {
   return (
     <Routes>
-      <Route path="/" element={<MainLayout/>}>
-        <Route index element={<HomePage />} />
+      <Route path="/" element={<BlankLayout/>}>
+        {/* <Route index element={<HomePage />} /> */}
         <Route path="products" element={<ProductsPage />} />
         <Route path="products/:id" element={<DetailPage />} />
       </Route>
       <Route path="/login" element={<BlankLayout />}>
         <Route index element={<LoginPage />} />
       </Route>
-      <Route path="/register" element={<RegisterPage />}>
+      <Route path="/register" element={<RegisterPage />}/>
+      <Route path="/users/:id" element={<AuthRequire><Profile/></AuthRequire>}>
+        <Route path="/orders" element={<CartPage/>}/>
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

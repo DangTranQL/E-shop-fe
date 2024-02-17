@@ -1,11 +1,13 @@
 // show user's order items
-
 import React, { useEffect, useState, useParams } from 'react';
 import { Alert, Box, Container, Typography } from '@mui/material';
-import LoadingScreen from '../components/LoadingScreen';
-import apiService from '../app/apiService';
+import LoadingScreen from '../../components/LoadingScreen';
+import apiService from '../../app/apiService';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 function CartPage() {
+    const [order, setOrder] = useState(null);
     const [orderItems, setOrderItems] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
@@ -16,7 +18,13 @@ function CartPage() {
         const getOrderItems = async () => {
             setLoading(true);
             try {
-            const res = await apiService.get(`/${params.id}/orders`);
+            const res = await apiService.get(`/users/${params.id}/orders`);
+            if (!res.data.order){
+                return (
+                    <Alert severity="info">You have no order now</Alert>
+                )
+            }
+            setOrder(res.data.order);
             setOrderItems(res.data.orderItems);
             setError("");
             } catch (error) {
@@ -52,13 +60,16 @@ function CartPage() {
                                                     height: 1,
                                                 }}
                                                 src={item.image}
-                                                alt="product"
+                                                alt="orderItem"
                                             />
                                             <Typography variant="h6">{item.title}</Typography>
-                                            <Typography variant="body1">{item.description}</Typography>
-                                            <Typography variant="body1">{item.category}</Typography>
-                                            <Typography variant="body1">{item.price}</Typography>
-                                            <Typography variant="body1">{item.stocks}</Typography>
+                                            <Typography variant="body1">{item.quantity}</Typography>
+                                            <Typography variant="body1">{item.priceEach}</Typography>
+
+                                            <Box>
+                                                <AddIcon onClick={() => apiService.put(`/users/${params.id}/orders`, {orderID: order._id, productID: item._id, title: item.title, quantity: 1, itemPrice: item.price, image: item.image})}/>
+                                                <RemoveIcon onClick={() => apiService.put(`/users/${params.id}/orders`, {orderID: order._id, productID: item._id, title: item.title, quantity: -1, itemPrice: item.price, image: item.image})}/>
+                                            </Box>
                                         </Box>
                                     ))
                                 )}
@@ -69,4 +80,7 @@ function CartPage() {
             </Box>
         </Container>
     );
-}
+};
+
+
+export default CartPage;

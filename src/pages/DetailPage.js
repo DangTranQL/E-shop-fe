@@ -10,6 +10,7 @@ import {
   Divider,
   Breadcrumbs,
   Link,
+  Button,
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import { fCurrency } from "../utils/NumberFormat"
@@ -18,8 +19,10 @@ import rehypeRaw from "rehype-raw";
 import apiService from "../app/apiService";
 import LoadingScreen from "../components/LoadingScreen";
 import { Alert } from "@mui/material";
+import useAuth from "../hooks/useAuth";
 
 function DetailPage() {
+  const auth = useAuth();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -152,6 +155,9 @@ function DetailPage() {
             )}
           </>
         )}
+      </Box>
+      <Box sx={{ mt: 3 }}>
+        <Button variant="contained" color="primary" size="large" onClick={() => apiService.put(`/users/${auth.user._id}/orders`, {productID: product._id, quantity: 1, title: product.title, itemPrice: product.price, image: product.image})}>Add to Cart</Button>
       </Box>
     </Container>
   );
