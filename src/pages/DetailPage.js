@@ -12,7 +12,7 @@ import {
   Link,
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { fCurrency } from "../utils";
+import { fCurrency } from "../utils/NumberFormat"
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import apiService from "../app/apiService";
@@ -31,7 +31,7 @@ function DetailPage() {
         setLoading(true);
         try {
           const res = await apiService.get(`/products/${params.id}`);
-          setProduct(res.data);
+          setProduct(res.data.data.product);
           setError("");
         } catch (error) {
           console.log(error);

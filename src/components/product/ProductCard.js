@@ -9,8 +9,9 @@ import { fCurrency } from "../../utils/NumberFormat";
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
+  console.log("PRODUCT", product)
   return (
-    <Card onClick={() => navigate(`/product/${product.id}`)}>
+    <Card onClick={() => navigate(`/product/${product._id}`)}>
       <CardActionArea>
         <CardMedia
           component="img"
