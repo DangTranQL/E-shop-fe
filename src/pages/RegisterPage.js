@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
-import { FTextField, FormProvider } from "../components/form";
+import { FSelect, FTextField, FormProvider } from "../components/form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -108,7 +108,16 @@ function RegisterPage() {
                         }}
                     />
 
-                    <FTextField name="role" label="Role" />
+                    <FSelect name="role" label="">
+                        {[
+                            { value: "buyer", label: "Buyer" },
+                            { value: "seller", label: "Seller" },
+                        ].map((option) => (
+                            <option key={option.value} value={option.value}>
+                            {option.label}
+                            </option>
+                        ))}
+                    </FSelect>
                     <FTextField name="address" label="Address" />
                     <FTextField name="phone" label="Phone" type="number" />
 

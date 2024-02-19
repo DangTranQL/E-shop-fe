@@ -11,6 +11,7 @@ import RegisterPage from "../pages/RegisterPage";
 import ProductsPage from "../pages/ProductsPage";
 import Profile from "../pages/user/Profile";
 import CartPage from "../pages/user/CartPage";
+import PaymentPage from "../pages/user/PaymentPage";
 
 function Router() {
   return (
@@ -25,7 +26,8 @@ function Router() {
       </Route>
       <Route path="/register" element={<RegisterPage />}/>
       <Route path="/users/:id" element={<AuthRequire><Profile/></AuthRequire>}>
-        <Route path="/orders" element={<CartPage/>}/>
+        <Route path="users/:id/orders" element={<CartPage/>}/>
+        <Route path="users/:id/payment" element={<PaymentPage/>}/>
       </Route>
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
