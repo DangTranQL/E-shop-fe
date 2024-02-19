@@ -108,7 +108,7 @@ function RegisterPage() {
                         }}
                     />
 
-                    <FSelect name="role" label="">
+                    <FSelect name="role">
                         {[
                             { value: "buyer", label: "Buyer" },
                             { value: "seller", label: "Seller" },

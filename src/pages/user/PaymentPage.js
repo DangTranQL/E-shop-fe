@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useParams } from 'react';
-import { Alert, Box, Container, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
 import apiService from '../../app/apiService';
 import LoadingScreen from '../../components/LoadingScreen';
+import { Link } from 'react-router-dom';
 
 function PaymentPage () {
     const [order, setOrder] = useState(null);
@@ -60,6 +61,14 @@ function PaymentPage () {
                                         <TextField id="name" label="Name on Card" variant="outlined" sx={{ mb: 2 }} />
                                         <TextField id="address" label="Address" variant="outlined" sx={{ mb: 2 }} />
                                         <TextField id="zip" label="Zip Code" variant="outlined" sx={{ mb: 2 }} />
+                                        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                                            <Button variant="contained" color="primary">
+                                                Pay
+                                            </Button>
+                                            <Link to={`/users/${params.id}/orders`}>
+                                                Cancel
+                                            </Link>
+                                        </Stack>
                                     </Box>
                                 )}
                             </>
