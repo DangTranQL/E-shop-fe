@@ -15,6 +15,7 @@ const RegisterSchema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Email is invalid"),
     password: Yup.string().required("Password is required"),
     passwordConfirmation: Yup.string().required("Confirm password is required").oneOf([Yup.ref("password")], "Passwords must match"),
+    role: Yup.string().required("Role is required"),
     address: Yup.string().required("Address is required"),
     phone: Yup.number().required("Phone is required"),
 });

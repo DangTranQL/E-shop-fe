@@ -1,9 +1,9 @@
 import React, { useState, useEffect} from "react";
 import apiService from "../app/apiService";
-import ProductList from "../components/product/ProductList";
-import ProductSearch from "../components/product/ProductSearch";
-import ProductFilter from "../components/product/ProductFilter";
-import ProductSort from "../components/product/ProductSort";
+import ProductList from "../features/product/ProductList";
+import ProductSearch from "../features/product/ProductSearch";
+import ProductFilter from "../features/product/ProductFilter";
+import ProductSort from "../features/product/ProductSort";
 import { useForm } from "react-hook-form";
 import  orderBy from "lodash";
 import { Alert, Box, Container, Stack } from "@mui/material";
@@ -11,7 +11,7 @@ import { FormProvider } from "../components/form";
 import LoadingScreen from "../components/LoadingScreen";
 import useAuth from "../hooks/useAuth";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from "react-router-dom";
 
 function ProductsPage() {
@@ -67,11 +67,11 @@ function ProductsPage() {
                 justifyContent="space-between"
                 mb={2}
               >
-                <ProductSearch />
+                <ProductSearch /> 
                 <ProductSort />
                 
-                <ShoppingBasketIcon onClick={() => auth?.user ? navigate(`/users/${auth.user._id}/orders`) : navigate('/login') }/>
-                <AccountCircleIcon onClick={() => auth?.user ? navigate(`/users/${auth.user._id}`) : navigate('/login') }/>
+                <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/orders`) : navigate('/login') }/>
+                <AccountCircleIcon onClick={() => auth?.user ? navigate(`/user/profile`) : navigate('/login') }/>
               </Stack>
             </FormProvider>
             <Box sx={{ position: "relative", height: 1 }}>

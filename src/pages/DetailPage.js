@@ -28,6 +28,8 @@ function DetailPage() {
   const [error, setError] = useState("");
   const params = useParams();
 
+  console.log("PRODUCT", params);
+
   useEffect(() => {
     if (params.id) {
       const getProduct = async () => {
