@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Container } from "@mui/material";
 import Profile from "../../features/user/Profile";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { getUser } from "../../features/user/userSlice";
+import { getCurrentUserProfile } from "../../features/user/userSlice";
 import LoadingScreen from "../../components/LoadingScreen";
 import useAuth from "../../hooks/useAuth";
 
@@ -16,9 +16,11 @@ function UserProfilePage() {
 
   useEffect(() => {
     if (userId) {
-      dispatch(getUser(userId));
+      dispatch(getCurrentUserProfile());
     }
-  }, [dispatch, userId]);
+  }, []);
+
+  console.log("SELECTEDUSER", selectedUser)
 
   return (
     <Container>

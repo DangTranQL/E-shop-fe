@@ -1,31 +1,33 @@
 // show user's order items
-import React, { useEffect, useState, useParams } from 'react';
-import { Alert, Box, Container, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Alert, Box, Button, Container, Typography } from '@mui/material';
 import LoadingScreen from '../../components/LoadingScreen';
 import apiService from '../../app/apiService';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import useAuth from '../../hooks/useAuth';
 
 function CartPage() {
     const [order, setOrder] = useState(null);
     const [orderItems, setOrderItems] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const params = useParams();
+    const userID = useAuth().user?._id;
 
     useEffect(() => {
-        if (params.id) {
+        if (userID) {
         const getOrderItems = async () => {
             setLoading(true);
             try {
-            const res = await apiService.get(`/users/${params.id}/orders`);
-            if (!res.data.order){
-                return (
-                    <Alert severity="info">You have no order now</Alert>
-                )
-            }
-            setOrder(res.data.order);
-            setOrderItems(res.data.orderItems);
+            const res = await apiService.get(`/orders/user/${userID}`);
+            console.log("ORDER", res);
+            // if (!res.data.order){
+            //     return (
+            //         <Alert severity="info">You have no order now</Alert>
+            //     )
+            // }
+            setOrder(res.data.data.order);
+            setOrderItems(res.data.data.orderItems);
             setError("");
             } catch (error) {
             console.log(error);
@@ -35,7 +37,7 @@ function CartPage() {
         };
         getOrderItems();
         }
-    }, [params]);
+    }, [userID]);
 
     return (
         <Container sx={{ my: 3 }}>
@@ -53,11 +55,12 @@ function CartPage() {
                             <>
                                 {orderItems && (
                                     orderItems.map((item, index) => (
+                                        console.log("ITEM", item),
                                         <Box key={index}>
                                             <Box component="img"
                                                 sx={{
-                                                    width: 1,
-                                                    height: 1,
+                                                    width: 0.5,
+                                                    height: 0.5,
                                                 }}
                                                 src={item.image}
                                                 alt="orderItem"
@@ -67,8 +70,8 @@ function CartPage() {
                                             <Typography variant="body1">{item.priceEach}</Typography>
 
                                             <Box>
-                                                <AddIcon onClick={() => apiService.put(`/users/${params.id}/orders`, {orderID: order._id, productID: item._id, title: item.title, quantity: 1, itemPrice: item.price, image: item.image})}/>
-                                                <RemoveIcon onClick={() => apiService.put(`/users/${params.id}/orders`, {orderID: order._id, productID: item._id, title: item.title, quantity: -1, itemPrice: item.price, image: item.image})}/>
+                                                <Button onClick={() => updateItem(order._id, item._id, item.quantity, 1)}>+</Button>
+                                                <Button onClick={() => updateItem(order._id, item._id, item.quantity -1)}>-</Button>
                                             </Box>
                                         </Box>
                                     ))
@@ -81,6 +84,19 @@ function CartPage() {
         </Container>
     );
 };
+
+const updateItem = async (orderId, itemid, itemQuantity, change) => {
+    try{
+        if (itemQuantity + change <= 0) {
+            await apiService.delete(`/orders/${orderId}/item/${itemid}`);
+            return;
+        }
+        const res = await apiService.patch(`/orders/${orderId}/item/${itemid}`, { change });
+        console.log("UPDATEITEM", res);
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 export default CartPage;

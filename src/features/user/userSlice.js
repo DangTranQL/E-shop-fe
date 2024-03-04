@@ -57,7 +57,7 @@ export const updateUserProfile =
         phone,
       };
       
-      const response = await apiService.put(`/users/${_id}`, data);
+      const response = await apiService.put(`/user/me`, data);
       dispatch(slice.actions.updateUserProfileSuccess(response.data));
       toast.success("Update Profile successfully");
     } catch (error) {
@@ -69,7 +69,7 @@ export const updateUserProfile =
 export const getUser = (id) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
-    const response = await apiService.get(`/users/${id}`);
+    const response = await apiService.get(`/user/${id}`);
     dispatch(slice.actions.getUserSuccess(response.data));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
@@ -80,8 +80,8 @@ export const getUser = (id) => async (dispatch) => {
 export const getCurrentUserProfile = () => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
-    const response = await apiService.get("/users/me");
-    dispatch(slice.actions.updateUserProfileSuccess(response.data));
+    const response = await apiService.get("/user/me");
+    dispatch(slice.actions.getUserSuccess(response.data.data.user));
   } catch (error) {
     dispatch(slice.actions.hasError(error));
   }

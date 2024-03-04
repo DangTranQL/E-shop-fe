@@ -13,7 +13,7 @@ const IconStyle = styled(Box)(({ theme }) => ({
 
 function ProfileAbout({ profile }) {
   console.log("PROFILE", profile); 
-  const { username, email, address, phone } = profile.data.user;
+  const { username, email, address, phone } = profile;
 
   return (
     <Card>

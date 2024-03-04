@@ -65,7 +65,7 @@ function AuthProvider({ children }) {
         const accessToken = localStorage.getItem('accessToken');
         if (accessToken && isValid(accessToken)) {
           setSession(accessToken);
-          const response = await apiService.get('/users/me');
+          const response = await apiService.get('/user/me');
           const user = response.data;
           dispatch({ type: LOGIN_SUCCESS, payload: { isAuthenticated: true, user } });
         }
@@ -97,7 +97,7 @@ function AuthProvider({ children }) {
   };
 
   const register = async ({username, email, password, role, address, phone}, callback) => {
-    const response = await apiService.post('/users', {username, email, password, role, address, phone});
+    const response = await apiService.post('/user', {username, email, password, role, address, phone});
     const { newUser, accessToken } = response.data.data;
 
     setSession(accessToken);

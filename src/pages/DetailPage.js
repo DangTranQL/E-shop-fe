@@ -159,7 +159,7 @@ function DetailPage() {
         )}
       </Box>
       <Box sx={{ mt: 3 }}>
-        <Button variant="contained" color="primary" size="large" onClick={() => apiService.put(`/users/${auth.user._id}/orders`, {productID: product._id, quantity: 1, title: product.title, itemPrice: product.price, image: product.image})}>Add to Cart</Button>
+        <Button variant="contained" color="primary" size="large" onClick={() => apiService.post('/orders/addCart', {productID: product._id, title: product.title, quantity: 1, itemPrice: product.price, image: product.image})}>Add to Cart</Button>
       </Box>
     </Container>
   );
