@@ -6,6 +6,8 @@ function AuthRequire({ children }) {
   const { isAuthenticated, isInitialized } = useAuth();
   const location = useLocation();
 
+  console.log("isInitialized", isInitialized)
+
   if (!isInitialized) {
     return <LoadingScreen />;
   }

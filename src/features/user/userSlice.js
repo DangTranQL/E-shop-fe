@@ -65,24 +65,3 @@ export const updateUserProfile =
       toast.error(error.message);
     }
   };
-
-export const getUser = (id) => async (dispatch) => {
-  dispatch(slice.actions.startLoading());
-  try {
-    const response = await apiService.get(`/user/${id}`);
-    dispatch(slice.actions.getUserSuccess(response.data));
-  } catch (error) {
-    dispatch(slice.actions.hasError(error));
-    toast.error(error.message);
-  }
-};
-
-export const getCurrentUserProfile = () => async (dispatch) => {
-  dispatch(slice.actions.startLoading());
-  try {
-    const response = await apiService.get("/user/me");
-    dispatch(slice.actions.getUserSuccess(response.data.data.user));
-  } catch (error) {
-    dispatch(slice.actions.hasError(error));
-  }
-};

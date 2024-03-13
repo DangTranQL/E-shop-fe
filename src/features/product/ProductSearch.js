@@ -6,7 +6,7 @@ import { FTextField } from "../../components/form";
 function ProductSearch() {
   return (
     <FTextField
-      name="searchQuery"
+      name="title"
       sx={{ width: 300 }}
       size="small"
       InputProps={{

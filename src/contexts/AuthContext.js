@@ -12,11 +12,13 @@ const INITIALIZED = 'AUTH.INITIALIZED';
 const LOGIN_SUCCESS = 'AUTH.LOGIN_SUCCESS';
 const REGISTER_SUCCESS = 'AUTH.REGISTER_SUCCESS';
 const LOGOUT = 'AUTH.LOGOUT';
+const UPDATE_USER = 'AUTH.UPDATE_USER';
 
 const reducer = (state, action) => {
   switch (action.type) {
     case INITIALIZED:
       const { isAuthenticated, user } = action.payload;
+      console.log("INITIALIZED", user)
       return {
         ...state,
         isInitialized: true,
@@ -32,6 +34,7 @@ const reducer = (state, action) => {
     case REGISTER_SUCCESS:
       return {
         ...state,
+
         isAuthenticated: true,
         user: action.payload.newUser,
       };
@@ -66,8 +69,8 @@ function AuthProvider({ children }) {
         if (accessToken && isValid(accessToken)) {
           setSession(accessToken);
           const response = await apiService.get('/user/me');
-          const user = response.data;
-          dispatch({ type: LOGIN_SUCCESS, payload: { isAuthenticated: true, user } });
+          const user = response.data.data;
+          dispatch({ type: INITIALIZED, payload: { isAuthenticated: true, user } });
         }
         else {
           setSession(null);
@@ -80,6 +83,8 @@ function AuthProvider({ children }) {
     }
     initialize();
   }, []);
+
+  console.log("AuthContext", initialState.user)
 
   const [state, dispatch] = useReducer(reducer, initialState);
 

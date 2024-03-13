@@ -3,11 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Box, Button, Container, Typography } from '@mui/material';
 import LoadingScreen from '../../components/LoadingScreen';
 import apiService from '../../app/apiService';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import useAuth from '../../hooks/useAuth';
 
-function CartPage() {
+function ItemsAll( {id} ) {
     const [order, setOrder] = useState(null);
     const [orderItems, setOrderItems] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -19,13 +17,7 @@ function CartPage() {
         const getOrderItems = async () => {
             setLoading(true);
             try {
-            const res = await apiService.get(`/orders/user/${userID}`);
-            console.log("ORDER", res);
-            // if (!res.data.order){
-            //     return (
-            //         <Alert severity="info">You have no order now</Alert>
-            //     )
-            // }
+            const res = await apiService.get(`/orders/${id}`);
             setOrder(res.data.data.order);
             setOrderItems(res.data.data.orderItems);
             setError("");
@@ -59,8 +51,8 @@ function CartPage() {
                                         <Box key={index}>
                                             <Box component="img"
                                                 sx={{
-                                                    width: 0.5,
-                                                    height: 0.5,
+                                                    width: 0.3,
+                                                    height: 0.3,
                                                 }}
                                                 src={item.image}
                                                 alt="orderItem"
@@ -71,7 +63,7 @@ function CartPage() {
 
                                             <Box>
                                                 <Button onClick={() => updateItem(order._id, item._id, item.quantity, 1)}>+</Button>
-                                                <Button onClick={() => updateItem(order._id, item._id, item.quantity -1)}>-</Button>
+                                                <Button onClick={() => updateItem(order._id, item._id, item.quantity, -1)}>-</Button>
                                             </Box>
                                         </Box>
                                     ))
@@ -91,12 +83,11 @@ const updateItem = async (orderId, itemid, itemQuantity, change) => {
             await apiService.delete(`/orders/${orderId}/item/${itemid}`);
             return;
         }
-        const res = await apiService.patch(`/orders/${orderId}/item/${itemid}`, { change });
-        console.log("UPDATEITEM", res);
+        await apiService.patch(`/orders/${orderId}/item/${itemid}`, { change });
     } catch (error) {
         console.log(error);
     }
 }
 
 
-export default CartPage;
+export default ItemsAll;

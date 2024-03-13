@@ -36,7 +36,7 @@ function ProductFilter({ resetFilter }) {
             Options
           </Typography>
           <FRadioGroup
-            name="options"
+            name="option"
             options={SORT_BY_OPTIONS}
             row={false}
           />

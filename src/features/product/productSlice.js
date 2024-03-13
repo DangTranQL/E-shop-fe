@@ -8,6 +8,7 @@ const initialState = {
   error: null,
   updatedProduct: null,
   selectedProduct: null,
+  filteredProducts: null,
 };
 
 const slice = createSlice({
@@ -37,6 +38,13 @@ const slice = createSlice({
 
       state.selectedProduct = action.payload;
     },
+
+    getFilteredProductsSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+
+      state.filteredProducts = action.payload;
+    },
   },
 });
 
@@ -51,9 +59,6 @@ export const updateProductDetail =
     stocks,
     price,
     image,
-    sold,
-    totalRating,
-    totalReview,
   }) =>
   async (dispatch) => {
     dispatch(slice.actions.startLoading());
@@ -65,9 +70,6 @@ export const updateProductDetail =
         stocks,
         price,
         image,
-        sold,
-        totalRating,
-        totalReview,
       };
       if (image instanceof File) {
         const imageUrl = await cloudinaryUpload(image);
@@ -86,9 +88,19 @@ export const getProduct = (id) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await apiService.get(`/products/${id}`);
-    dispatch(slice.actions.getProductSuccess(response.data));
+    dispatch(slice.actions.getProductSuccess(response.data.data));
   } catch (error) {
-    dispatch(slice.actions.hasError(error));
-    toast.error(error.message);
+    dispatch(slice.actions.hasError(error.message));
+  }
+};
+
+export const filterProduct = (filter) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    console.log("filter", filter);
+    const response = await apiService.get("/products", { params: filter });
+    dispatch(slice.actions.getFilteredProductsSuccess(response.data.data));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
   }
 };
