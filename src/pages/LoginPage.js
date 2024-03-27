@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import useAuth from "../hooks/useAuth";
-import { useNavigate, useLocation, Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { Alert, Container, IconButton, InputAdornment, Link, Stack } from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
@@ -18,7 +18,7 @@ const LoginSchema = Yup.object().shape({
 const defaultValues = {
   email: "",
   password: "",
-  rememberMe: true,
+  rememberMe: false,
 };
 
 function LoginPage () {
@@ -29,18 +29,13 @@ function LoginPage () {
   });
 
   const { handleSubmit, reset, setError, formState: { errors, isSubmitting } } = methods;
-  const navigate = useNavigate();
-  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data) => {
-    const from = location.state?.from?.pathname || "/" ;
-    const { email, password} = data;
+    const { email, password } = data;
 
     try {
-      await auth.login({ email, password }, () => {
-        navigate(from, { replace: true });
-      });
+      await auth.login({ email, password });
     } catch (error) {
       reset();
       setError("responseError", error);

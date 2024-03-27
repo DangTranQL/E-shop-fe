@@ -7,7 +7,6 @@ export const SORT_BY_CATEGORIES = [
     { value: "clothing", label: "Clothing" },
     { value: "food", label: "Food" },
     { value: "medicine", label: "Medicine" },
-    { value: "other", label: "Other" },
 ];
 
 export const SORT_BY_OPTIONS = [
@@ -19,7 +18,7 @@ export const SORT_BY_OPTIONS = [
 
 function ProductFilter({ resetFilter }) {
     return (
-      <Stack spacing={3} sx={{ p: 3, width: 250 }}>
+      <Stack spacing={3} sx={{ p: 2, width: 250 }}>
         <Stack spacing={1}>
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
             Categories
@@ -33,7 +32,7 @@ function ProductFilter({ resetFilter }) {
   
         <Stack spacing={1}>
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            Options
+            Sort
           </Typography>
           <FRadioGroup
             name="option"

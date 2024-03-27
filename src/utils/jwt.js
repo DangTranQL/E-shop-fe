@@ -8,3 +8,9 @@ export const isValid = (accessToken) => {
 
     return decoded.exp > currentTime;
 }
+
+export const decodeToken = (accessToken) => {
+    if (!accessToken) return null;
+
+    return jwtDecode(accessToken);
+}

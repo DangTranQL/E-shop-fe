@@ -1,6 +1,7 @@
 import { createContext, useReducer, useEffect } from 'react';
 import apiService from '../app/apiService';
 import { isValid } from '../utils/jwt';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const initialState = {
   isInitialized: false,
@@ -12,13 +13,11 @@ const INITIALIZED = 'AUTH.INITIALIZED';
 const LOGIN_SUCCESS = 'AUTH.LOGIN_SUCCESS';
 const REGISTER_SUCCESS = 'AUTH.REGISTER_SUCCESS';
 const LOGOUT = 'AUTH.LOGOUT';
-const UPDATE_USER = 'AUTH.UPDATE_USER';
 
 const reducer = (state, action) => {
   switch (action.type) {
     case INITIALIZED:
       const { isAuthenticated, user } = action.payload;
-      console.log("INITIALIZED", user)
       return {
         ...state,
         isInitialized: true,
@@ -84,13 +83,14 @@ function AuthProvider({ children }) {
     initialize();
   }, []);
 
-  console.log("AuthContext", initialState.user)
-
   const [state, dispatch] = useReducer(reducer, initialState);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const login = async ({email, password}, callback) => {
     const response = await apiService.post('/login', {email, password});
     const { user, accessToken } = response.data.data;
+    const from = location.state?.from?.pathname || "/" ;
 
     setSession(accessToken);
     dispatch({
@@ -98,7 +98,11 @@ function AuthProvider({ children }) {
       payload: { user },
     });
 
-    callback();
+    if (user.role === "buyer") {
+      navigate(from, { replace: true });
+    } else {
+      navigate("/admin", { replace: true });
+    }
   };
 
   const register = async ({username, email, password, role, address, phone}, callback) => {

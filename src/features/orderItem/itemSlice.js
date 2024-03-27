@@ -8,6 +8,8 @@ const initialState = {
   updatedItem: null,
   selectedItem: null,
   items: null,
+  numberOfItems: 0,
+  order: null,
 };
 
 const slice = createSlice({
@@ -42,7 +44,9 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
     
+      state.order = action.payload.order;
       state.items = action.payload.orderItems;
+      state.numberOfItems = action.payload.orderItems.length;
     },
   },
 });
@@ -71,10 +75,10 @@ export const updateItem =
     }
   };
 
-export const getAllItems = (id) => async (dispatch) => {
+export const getAllItems = (id, filter) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
-    const response = await apiService.get(`/orders/${id}`);
+    const response = await apiService.get(`/orders/${id}`, { params: filter });
     dispatch(slice.actions.getAllItemsSuccess(response.data.data));
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));

@@ -7,8 +7,10 @@ const initialState = {
   isLoading: false,
   error: null,
   updatedProduct: null,
+  deletedProduct: null,
   selectedProduct: null,
   filteredProducts: null,
+  numberOfProducts: 0,
 };
 
 const slice = createSlice({
@@ -44,7 +46,16 @@ const slice = createSlice({
       state.error = null;
 
       state.filteredProducts = action.payload;
+      state.numberOfProducts = action.payload.count;
     },
+
+    deleteProductSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+
+      state.deletedProduct = action.payload;
+      state.numberOfProducts -= 1;
+    }
   },
 });
 
@@ -52,9 +63,9 @@ export default slice.reducer;
 
 export const updateProductDetail =
   ({
-    _id,
+    id,
     title,
-    desciprtion,
+    description,
     category,
     stocks,
     price,
@@ -65,7 +76,7 @@ export const updateProductDetail =
     try {
       const data = {
         title,
-        desciprtion,
+        description,
         category,
         stocks,
         price,
@@ -75,7 +86,8 @@ export const updateProductDetail =
         const imageUrl = await cloudinaryUpload(image);
         data.image = imageUrl;
       }
-      const response = await apiService.put(`/products/${_id}`, data);
+      const response = await apiService.put(`/admin/products/${id}`, data);
+      console.log("update", response);
       dispatch(slice.actions.updateProductSuccess(response.data));
       toast.success("Update Detail successfully");
     } catch (error) {
@@ -97,10 +109,21 @@ export const getProduct = (id) => async (dispatch) => {
 export const filterProduct = (filter) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
-    console.log("filter", filter);
     const response = await apiService.get("/products", { params: filter });
     dispatch(slice.actions.getFilteredProductsSuccess(response.data.data));
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));
+  }
+};
+
+export const deleteProduct = (id) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.delete(`/admin/products/${id}`);
+    dispatch(slice.actions.deleteProductSuccess(response.data.data));
+    toast.success("Delete product successfully");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    toast.error(error.message);
   }
 };

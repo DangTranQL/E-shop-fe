@@ -1,23 +1,19 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { CardActionArea, Stack } from "@mui/material";
+import { Box, CardActionArea, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { fCurrency } from "../../utils/NumberFormat";
 
 function ProductCard({ product }) {
   const navigate = useNavigate();
   return (
-    <Card onClick={() => navigate(`/products/${product._id}`)}>
+    <Card onClick={() => navigate(`/products/${product._id}`)} sx={{ width: 200, height: 200 }}>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="200"
-          image={product.image}
-          alt="green iguana"
-        />
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <img src={product.image} alt={product.title} height="120"/>
+        </Box>
         <CardContent>
           <Typography gutterBottom variant="body1" component="div" noWrap>
             {product.title}

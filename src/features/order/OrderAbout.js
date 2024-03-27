@@ -8,15 +8,11 @@ import { fCurrency } from "../../utils/NumberFormat";
 
 function OrderAbout({ order }) {
   const navigate = useNavigate();
+  const cardStyle = order.status === 'pending' ? {backgroundColor: '#FFE4B5'} : {backgroundColor: '#66CDAA'};
+
   return (
-    <Card onClick={() => navigate(`/orders/${order._id}`)}>
+    <Card style={cardStyle} onClick={() => navigate(`/orders/${order._id}`)}>
       <CardActionArea>
-        {/* <CardMedia
-          component="img"
-          height="200"
-          image={product.image}
-          alt="green iguana"
-        /> */}
         <CardContent>
           <Stack
             direction="column"
@@ -25,13 +21,16 @@ function OrderAbout({ order }) {
             justifyContent="flex-end"
           >
             <Typography>
-                {order._id}
+                Date: {new Date(order.createdAt).toLocaleDateString()}
             </Typography>
             <Typography variant="subtitle1">
               {fCurrency(order.price)}
             </Typography>
             <Typography variant="subtitle1">
-                {order.status}
+              ADDRESS: {order.address}
+            </Typography>
+            <Typography variant="subtitle1">
+                STATUS: {order.status}
             </Typography>
           </Stack>
         </CardContent>

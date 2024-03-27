@@ -3,10 +3,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import { FTextField } from "../../components/form";
 
-function ProductSearch() {
+function UserSearch() {
   return (
     <FTextField
-      name="title"
+      name="username"
       sx={{ width: 700 }}
       size="small"
       InputProps={{
@@ -20,4 +20,4 @@ function ProductSearch() {
   );
 }
 
-export default ProductSearch;
+export default UserSearch;

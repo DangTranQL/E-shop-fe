@@ -8,7 +8,9 @@ const initialState = {
   updatedOrder: null,
   selectedOrder: null,
   pendingOrder: null,
-  pastOrders: null,
+  completedOrders: null,
+  numberOfOrders: 0,
+  allOrders: null,
 };
 
 const slice = createSlice({
@@ -39,12 +41,29 @@ const slice = createSlice({
       state.selectedOrder = action.payload;
     },
 
-    getAllOrdersSuccess(state, action) {
+    getPendingOrderSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+
+      state.pendingOrder = action.payload.pendingOrder;
+    },
+
+    getCompletedOrdersSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
     
-      state.pendingOrder = action.payload.pendingOrder;
-      state.pastOrders = action.payload.pastOrders;
+      state.completedOrders = action.payload.completedOrders;
+
+      state.numberOfOrders = action.payload.completedOrders.length;
+    },
+
+    getAllOrdersSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+
+      const { orders, count } = action.payload;
+      state.allOrders = orders;
+      state.numberOfOrders = count;
     },
   },
 });
@@ -76,11 +95,21 @@ export const updateOrder =
     }
   };
 
-export const getAllOrders = () => async (dispatch) => {
+export const getPendingOrder= () => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
-    const response = await apiService.get(`/orders/me/all`);
-    dispatch(slice.actions.getAllOrdersSuccess(response.data.data));
+    const response = await apiService.get(`/orders/me/pending`);
+    dispatch(slice.actions.getPendingOrderSuccess(response.data.data));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+  }
+};
+
+export const getCompletedOrders = (filter) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.get('/orders/me/completed', { params: filter });
+    dispatch(slice.actions.getCompletedOrdersSuccess(response.data.data));
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));
   }
@@ -90,7 +119,19 @@ export const getOrder = (id) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await apiService.get(`/orders/${id}`);
+    console.log(id);
     dispatch(slice.actions.getOrderSuccess(response.data.data));
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+  }
+};
+
+export const getAllOrders = ({page, limit}) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.get('/admin/orders', { params: {page, limit} });
+    console.log("getAllOrders", response);
+    dispatch(slice.actions.getAllOrdersSuccess(response.data.data));
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));
   }

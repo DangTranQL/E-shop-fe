@@ -1,24 +1,57 @@
-import React, { useEffect} from "react";
+import React, { useEffect, useState} from "react";
 import ProductList from "../features/product/ProductList";
 import ProductSearch from "../features/product/ProductSearch";
 import ProductFilter from "../features/product/ProductFilter";
 import { useForm } from "react-hook-form";
-import { Box, Container, Stack } from "@mui/material";
+import { Box, Container, Menu, MenuItem, Pagination, Stack } from "@mui/material";
 import { FormProvider } from "../components/form";
 import LoadingScreen from "../components/LoadingScreen";
 import useAuth from "../hooks/useAuth";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import { useNavigate } from "react-router-dom";
 import { filterProduct } from "../features/product/productSlice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
-function ProductsPage() {
+function HomePage() {
     const auth = useAuth();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [page, setPage] = useState(1);
+    const limit = 12;
 
-    const { filteredProducts, isLoading } = useSelector(
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+      setAnchorEl(null);
+      if (auth?.user) {
+        navigate(`/user/profile`);
+      } else {
+        navigate(`/login`);
+      }
+    };
+
+    const Logout = async () => {
+      const from = "/" ;
+      try {
+        await auth.logout(() => {
+          navigate(from, { replace: true });
+        });
+      } catch (error) {
+        reset();
+      }
+    };
+
+    const handleChange = (event, value) => {
+        setPage(value);
+    };
+
+    const { filteredProducts, numberOfProducts, isLoading } = useSelector(
         (state) => state.product,
         shallowEqual
     );
@@ -33,14 +66,12 @@ function ProductsPage() {
         defaultValues: defaultFilter,
     });
 
-    const { watch, reset} = methods;
+    const { watch, reset } = methods;
     const filter = watch();
 
     useEffect(() => {
-        dispatch(filterProduct(filter));
-    }, [filter.option, filter.category, filter.title]);
-
-    console.log("filteredProducts", filteredProducts);
+        dispatch(filterProduct({page, limit, ...filter}));
+    }, [filter.option, filter.category, filter.title, page]);
 
     return (
         <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
@@ -60,8 +91,19 @@ function ProductsPage() {
               >
                 <ProductSearch /> 
                 
-                <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/orders`) : navigate('/login') }/>
-                <AccountCircleIcon onClick={() => auth?.user ? navigate(`/user/profile`) : navigate('/login') }/>
+                <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
+                <ShoppingBagIcon onClick={() => auth?.user ? navigate(`/user/completedOrders`) : navigate('/login') }/>
+                <AccountCircleIcon aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}/>
+                <Menu
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  {auth?.user ? <MenuItem onClick={Logout}>Logout</MenuItem> : null}
+                </Menu>
+
               </Stack>
             </FormProvider>
             <Box sx={{ position: "relative", height: 1 }}>
@@ -73,9 +115,12 @@ function ProductsPage() {
                 </>
               )}
             </Box>
+            <Box display="flex" justifyContent="center" alignItems="center">
+                <Pagination count={Math.ceil(numberOfProducts/12)} color="primary" onChange={handleChange}/>
+            </Box>
           </Stack>
         </Container>
       );
 };
 
-export default ProductsPage;
+export default HomePage;

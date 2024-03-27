@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useAuth from "../hooks/useAuth";
-import { FSelect, FTextField, FormProvider } from "../components/form";
+import { FTextField, FormProvider } from "../components/form";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -25,7 +25,7 @@ const defaultValues = {
     email: "",
     password: "",
     passwordConfirmation: "",
-    role: "",
+    role: "buyer",
     address: "",
     phone: null,
 };
@@ -109,7 +109,7 @@ function RegisterPage() {
                         }}
                     />
 
-                    <FSelect name="role">
+                    {/* <FSelect name="role">
                         {[
                             { value: "buyer", label: "Buyer" },
                             { value: "seller", label: "Seller" },
@@ -118,7 +118,7 @@ function RegisterPage() {
                             {option.label}
                             </option>
                         ))}
-                    </FSelect>
+                    </FSelect> */}
                     <FTextField name="address" label="Address" />
                     <FTextField name="phone" label="Phone" type="number" />
 

@@ -1,13 +1,13 @@
 import { Box, Grid } from "@mui/material";
-import ProductCard from "./ProductCard";
+import AdminProductCard from "./AdminProductCard";
 
-function ProductList({ products, loading }) {
+function AdminProductList({ products, loading }) {
   return (
     <Grid container spacing={3} mt={1}>
       {products?.products?.map((product, index) => (
         <Grid key={product._id} item xs={9} md={4} lg={3}>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <ProductCard product={product}/>
+            <AdminProductCard product={product}/>
           </Box>
         </Grid>
       ))}
@@ -15,4 +15,4 @@ function ProductList({ products, loading }) {
   );
 }
 
-export default ProductList;
+export default AdminProductList;

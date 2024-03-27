@@ -12,7 +12,7 @@ import {
   Link,
   Button,
 } from "@mui/material";
-import { Link as RouterLink, useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import { fCurrency } from "../utils/NumberFormat"
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -20,10 +20,15 @@ import apiService from "../app/apiService";
 import LoadingScreen from "../components/LoadingScreen";
 import { getProduct } from "../features/product/productSlice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import useAuth from "../hooks/useAuth";
 
 function DetailPage() {
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const auth = useAuth();
 
   const { selectedProduct, isLoading } = useSelector(
     (state) => state.product,
@@ -39,12 +44,16 @@ function DetailPage() {
 
   return (
     <Container sx={{ my: 3 }}>
-      <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 4 }}>
-        <Link underline="hover" color="inherit" component={RouterLink} to="/">
-          E-Shop
-        </Link>
-        <Typography color="text.primary">{selectedProduct?.product?.title}</Typography>
-      </Breadcrumbs>
+      <Stack direction="row" spacing={10} sx={{ mb: 3 }}>
+        <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 4 }}>
+          <Link underline="hover" color="inherit" component={RouterLink} to="/">
+            E-Shop
+          </Link>
+          <Typography color="text.primary">{selectedProduct?.product?.title}</Typography>
+        </Breadcrumbs>
+        <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
+        <ShoppingBagIcon onClick={() => auth?.user ? navigate(`/user/completedOrders`) : navigate('/login') }/>
+      </Stack>
       <Box sx={{ position: "relative", height: 1 }}>
         {isLoading ? (
           <LoadingScreen />
@@ -65,8 +74,8 @@ function DetailPage() {
                         <Box
                           component="img"
                           sx={{
-                            width: 1,
-                            height: 1,
+                            width: 0.7,
+                            height: 0.7,
                           }}
                           src={selectedProduct?.product?.image}
                           alt="product"
@@ -75,23 +84,11 @@ function DetailPage() {
                     </Box>
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        mt: 2,
-                        mb: 1,
-                        display: "block",
-                        textTransform: "uppercase",
-                        color:
-                          selectedProduct?.product?.status === "sale"
-                            ? "error.main"
-                            : "info.main",
-                      }}
-                    >
-                      {selectedProduct?.product?.status}
+                    <Typography variant="h4" paragraph>
+                      {selectedProduct?.product?.title}
                     </Typography>
                     <Typography variant="h5" paragraph>
-                      {selectedProduct?.product?.title}
+                      Stocks: {selectedProduct?.product?.stocks}
                     </Typography>
                     <Stack
                       direction="row"
@@ -129,7 +126,7 @@ function DetailPage() {
           )}
       </Box>
       <Box sx={{ mt: 3 }}>
-        <Button variant="contained" color="primary" size="large" onClick={() => apiService.post('/orders/addCart', {productID: selectedProduct.product._id, title: selectedProduct.product.title, quantity: 1, itemPrice: selectedProduct.product.price, image: selectedProduct.product.image})}>Add to Cart</Button>
+        <Button variant="contained" color="primary" size="large" disabled={selectedProduct?.product?.stocks === 0} onClick={() => apiService.post('/orders/addCart', {productID: selectedProduct.product._id, title: selectedProduct.product.title, quantity: 1, itemPrice: selectedProduct.product.price, image: selectedProduct.product.image})}>Add to Cart</Button>
       </Box>
     </Container>
   );

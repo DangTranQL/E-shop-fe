@@ -6,13 +6,13 @@ import ThemeProvider from "./contexts/ThemeProvider";
 
 function App() {
   return (
-    <AuthProvider>
       <BrowserRouter>
-        <ThemeProvider>
-          <Router />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <Router />
+          </ThemeProvider>
+        </AuthProvider>
       </BrowserRouter>
-    </AuthProvider>
   );
 }
 
