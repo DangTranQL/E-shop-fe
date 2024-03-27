@@ -1,8 +1,8 @@
 import axios from "axios";
-import { BASE_URL } from "./config";
+import { BACKEND_URL } from "./config";
 
 const apiService = axios.create({
-  baseURL: BASE_URL,
+  baseURL: BACKEND_URL,
 });
 
 apiService.interceptors.request.use(
