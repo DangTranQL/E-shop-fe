@@ -42,7 +42,7 @@ function ProductsPage() {
 
     useEffect(() => {
         dispatch(filterProduct({page, limit, ...filter}));
-    }, [page, updatedProduct, numberOfProducts, dispatch, filter]);
+    }, [page, updatedProduct, numberOfProducts, dispatch, filter.category, filter.option, filter.title]);
 
     return (
         <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>

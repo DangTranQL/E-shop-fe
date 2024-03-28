@@ -71,7 +71,7 @@ function HomePage() {
 
     useEffect(() => {
         dispatch(filterProduct({page, limit, ...filter}));
-    }, [page, dispatch, filter]);
+    }, [page, dispatch, filter.category, filter.option, filter.title]);
 
     return (
         <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
