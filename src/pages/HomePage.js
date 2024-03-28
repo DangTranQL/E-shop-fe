@@ -70,7 +70,7 @@ function HomePage() {
     const filter = watch();
 
     useEffect(() => {
-        dispatch(filterProduct({page, limit, ...filter}));
+        dispatch(filterProduct({page, limit, ...filter.category, ...filter.option, ...filter.title}));
     }, [page, dispatch, filter.category, filter.option, filter.title]);
 
     return (

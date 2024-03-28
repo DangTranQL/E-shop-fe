@@ -41,7 +41,7 @@ function ProductsPage() {
     const filter = watch();
 
     useEffect(() => {
-        dispatch(filterProduct({page, limit, ...filter}));
+        dispatch(filterProduct({page, limit, ...filter.category, ...filter.option, ...filter.title}));
     }, [page, updatedProduct, numberOfProducts, dispatch, filter.category, filter.option, filter.title]);
 
     return (
