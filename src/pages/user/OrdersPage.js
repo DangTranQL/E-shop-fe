@@ -29,7 +29,7 @@ function OrdersPage() {
         } else {
             navigate('/login');
         }
-    }, [page]);
+    }, [page, dispatch, userId, navigate]);
 
     return (
         <Container>

@@ -40,7 +40,7 @@ function DetailPage() {
     if (params.id) {
       dispatch(getProduct(params.id));
     }
-  }, []);
+  }, [dispatch, params.id]);
 
   return (
     <Container sx={{ my: 3 }}>

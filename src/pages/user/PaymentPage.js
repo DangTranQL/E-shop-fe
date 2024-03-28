@@ -44,7 +44,7 @@ function PaymentPage () {
         if (auth.user?._id) {
             dispatch(getOrder(params.id));
         }
-    }, []);
+    }, [dispatch, params.id, auth.user?._id]);
 
 
     return (

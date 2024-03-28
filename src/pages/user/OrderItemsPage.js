@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Container, Grid, Pagination, Typography } from '@mui/material';
+import { Box, Button, Container, Pagination, Typography } from '@mui/material';
 import LoadingScreen from '../../components/LoadingScreen';
 import useAuth from '../../hooks/useAuth';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -47,7 +47,7 @@ function OrderItemsPage() {
         if (userId) {
             dispatch(getAllItems(id, {page, limit}));
         }
-    }, [page, numChange]);
+    }, [page, numChange, dispatch, userId, id]);
 
 
     return (

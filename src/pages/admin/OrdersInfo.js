@@ -23,7 +23,7 @@ function OrdersInfo() {
 
     useEffect(() => {
         dispatch(getAllOrders({page, limit}));
-    }, [page]);
+    }, [page, dispatch]);
 
     return (
         <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../features/user/userSlice";
 import LoadingScreen from "../../components/LoadingScreen";
-import { FormProvider } from "react-hook-form";
 import { Box, Container, Pagination, Stack, Typography } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from "react-router-dom";
@@ -25,7 +24,7 @@ function UsersInfo() {
     useEffect(() => {
         console.log("filter", page, limit);
         dispatch(getUsers({page, limit}));
-    }, [page]);
+    }, [page, dispatch]);
 
     return (
         <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>

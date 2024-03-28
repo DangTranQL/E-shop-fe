@@ -23,7 +23,7 @@ function CartPage() {
         } else {
             navigate('/login');
         }
-    }, []);
+    }, [dispatch, userId, navigate]);
 
     return (
         <Container>
