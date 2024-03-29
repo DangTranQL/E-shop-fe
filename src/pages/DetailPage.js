@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   Grid,
@@ -23,6 +23,8 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import useAuth from "../hooks/useAuth";
+import Badge from '@mui/material/Badge';
+import { toast } from "react-toastify";
 
 function DetailPage() {
   const params = useParams();
@@ -35,6 +37,22 @@ function DetailPage() {
     shallowEqual
   );
 
+  const { numberOfItemsInPending } = useSelector(
+    (state) => state.order,
+    shallowEqual
+  );
+
+  const [addCart, setAddCart] = useState(numberOfItemsInPending);
+
+  const addCartHandler = async () => {
+    setAddCart(addCart + 1);
+    try {
+      await apiService.post('/orders/addCart', {productID: selectedProduct.product._id, title: selectedProduct.product.title, quantity: 1, itemPrice: selectedProduct.product.price, image: selectedProduct.product.image});
+      toast.success("Add to cart successfully");
+    } catch (error) {
+      toast.error("Add to cart failed");
+    }
+  };
 
   useEffect(() => {
     if (params.id) {
@@ -51,7 +69,9 @@ function DetailPage() {
           </Link>
           <Typography color="text.primary">{selectedProduct?.product?.title}</Typography>
         </Breadcrumbs>
-        <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
+        <Badge badgeContent={addCart} color="primary">
+          <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
+        </Badge>
         <ShoppingBagIcon onClick={() => auth?.user ? navigate(`/user/completedOrders`) : navigate('/login') }/>
       </Stack>
       <Box sx={{ position: "relative", height: 1 }}>
@@ -126,7 +146,7 @@ function DetailPage() {
           )}
       </Box>
       <Box sx={{ mt: 3 }}>
-        <Button variant="contained" color="primary" size="large" disabled={selectedProduct?.product?.stocks === 0} onClick={() => apiService.post('/orders/addCart', {productID: selectedProduct.product._id, title: selectedProduct.product.title, quantity: 1, itemPrice: selectedProduct.product.price, image: selectedProduct.product.image})}>Add to Cart</Button>
+        <Button variant="contained" color="primary" size="large" disabled={selectedProduct?.product?.stocks === 0} onClick={addCartHandler}>Add to Cart</Button>
       </Box>
     </Container>
   );

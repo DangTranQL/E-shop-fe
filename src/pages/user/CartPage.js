@@ -12,7 +12,7 @@ function CartPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { pendingOrder, isLoading } = useSelector(
+    const { pendingOrder, updatedOrder, isLoading } = useSelector(
         (state) => state.order,
         shallowEqual
     );
@@ -23,7 +23,7 @@ function CartPage() {
         } else {
             navigate('/login');
         }
-    }, [dispatch, userId, navigate]);
+    }, [dispatch, userId, navigate, updatedOrder]);
 
     return (
         <Container>

@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
-import apiService from '../../app/apiService';
 import LoadingScreen from '../../components/LoadingScreen';
 import { useParams } from 'react-router-dom/dist';
 import useAuth from '../../hooks/useAuth';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { getOrder } from '../../features/order/orderSlice';
+import { getOrder, updateOrder } from '../../features/order/orderSlice';
 import validator from 'validator';
 import { useForm } from 'react-hook-form';
-// import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 function PaymentPage () {
     const auth = useAuth();
@@ -21,7 +19,8 @@ function PaymentPage () {
 
     const onSubmit = data => {
         if (Object.values(data).every(x => (x !== null && x !== ''))) {
-          updateOrder(selectedOrder.order._id);
+          console.log("onSubmit", typeof selectedOrder.order._id);
+          dispatch(updateOrder({id: selectedOrder.order._id, status: "completed", paymentMethod: "Card"}));
         } else {
           console.log('All fields must be filled');
         }
@@ -65,10 +64,6 @@ function PaymentPage () {
                                 <Typography variant="h6" sx={{ mb: 2 }}>
                                     Total: ${selectedOrder.order.price}
                                 </Typography>
-                                
-                                {/* <PayPalScriptProvider options={{ clientId: "test" }}>
-                                    <PayPalButtons style={{ layout: "horizontal" }} />
-                                </PayPalScriptProvider> */}
 
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <TextField {...register("card", { required: true })} id="card" label="Card Number" variant="outlined" sx={{ mb: 2 }} onChange={(e) => validateCard(e.target.value)}/> <br/>
@@ -100,14 +95,5 @@ function PaymentPage () {
         </Container>
     );
 }
-
-const updateOrder = async (id) => {
-    try {
-        const res = await apiService.patch(`/orders/${id}`, {status: "completed", paymentMethod: "card"});
-        console.log(res);
-    } catch (error) {
-        console.log(error);
-    }
-};
 
 export default PaymentPage;

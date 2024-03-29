@@ -13,6 +13,8 @@ import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import { useNavigate } from "react-router-dom";
 import { filterProduct } from "../features/product/productSlice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import Badge from '@mui/material/Badge';
+import { getPendingOrder } from "../features/order/orderSlice";
 
 function HomePage() {
     const auth = useAuth();
@@ -56,6 +58,11 @@ function HomePage() {
         shallowEqual
     );
 
+    const { numberOfItemsInPending } = useSelector(
+        (state) => state.order,
+        shallowEqual
+    );
+
     const defaultFilter = {
         title: null,
         category: null,
@@ -70,7 +77,8 @@ function HomePage() {
     const filter = watch();
 
     useEffect(() => {
-        dispatch(filterProduct({page, limit, ...filter.category, ...filter.option, ...filter.title}));
+        dispatch(filterProduct({page, limit, ...filter}));
+        dispatch(getPendingOrder());
     }, [page, dispatch, filter.category, filter.option, filter.title]);
 
     return (
@@ -91,7 +99,11 @@ function HomePage() {
               >
                 <ProductSearch /> 
                 
-                <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
+                {/* <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/> */}
+
+                <Badge badgeContent={numberOfItemsInPending} color="primary">
+                  <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
+                </Badge>
                 <ShoppingBagIcon onClick={() => auth?.user ? navigate(`/user/completedOrders`) : navigate('/login') }/>
                 <AccountCircleIcon aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}/>
                 <Menu

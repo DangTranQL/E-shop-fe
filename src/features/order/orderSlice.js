@@ -10,6 +10,7 @@ const initialState = {
   pendingOrder: null,
   completedOrders: null,
   numberOfOrders: 0,
+  numberOfItemsInPending: 0,
   allOrders: null,
 };
 
@@ -46,6 +47,7 @@ const slice = createSlice({
       state.error = null;
 
       state.pendingOrder = action.payload.pendingOrder;
+      state.numberOfItemsInPending = action.payload.numberOfItems;
     },
 
     getCompletedOrdersSuccess(state, action) {
@@ -72,9 +74,8 @@ export default slice.reducer;
 
 export const updateOrder =
   ({
-    _id,
+    id,
     status,
-    price,
     paymentMethod,
   }) =>
   async (dispatch) => {
@@ -82,13 +83,12 @@ export const updateOrder =
     try {
       const data = {
         status,
-        price,
         paymentMethod,
       };
       
-      const response = await apiService.patch(`/orders/${_id}`, data);
-      dispatch(slice.actions.updateOrderSuccess(response.data));
-      toast.success("Update Order successfully");
+      const response = await apiService.patch(`/orders/${id}`, data);
+      dispatch(slice.actions.updateOrderSuccess(response.data.data));
+      toast.success("Submit Payment successfully");
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
       toast.error(error.message);
