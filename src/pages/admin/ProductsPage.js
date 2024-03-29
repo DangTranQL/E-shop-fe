@@ -42,6 +42,7 @@ function ProductsPage() {
 
     useEffect(() => {
         dispatch(filterProduct({page, limit, ...filter}));
+        // eslint-disable-next-line
     }, [page, updatedProduct, numberOfProducts, dispatch, filter.category, filter.option, filter.title]);
 
     return (

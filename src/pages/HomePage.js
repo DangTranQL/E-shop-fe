@@ -79,6 +79,7 @@ function HomePage() {
     useEffect(() => {
         dispatch(filterProduct({page, limit, ...filter}));
         dispatch(getPendingOrder());
+        // eslint-disable-next-line
     }, [page, dispatch, filter.category, filter.option, filter.title]);
 
     return (
