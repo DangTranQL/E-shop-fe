@@ -87,10 +87,6 @@ function DetailPage() {
           </Link>
           <Typography color="text.primary">{selectedProduct?.product?.title}</Typography>
         </Breadcrumbs>
-        {/* <Badge badgeContent={addCart} color="primary">
-          <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
-        </Badge>
-        <ShoppingBagIcon onClick={() => auth?.user ? navigate(`/user/completedOrders`) : navigate('/login') }/> */}
       </Stack>
       <Box sx={{ position: "relative", height: 1 }}>
         {isLoading ? (

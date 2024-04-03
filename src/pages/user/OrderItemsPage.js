@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Container, Pagination, Typography } from '@mui/material';
+import { Box, Button, Container, Pagination, Stack, Typography } from '@mui/material';
 import LoadingScreen from '../../components/LoadingScreen';
 import useAuth from '../../hooks/useAuth';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getAllItems } from '../../features/orderItem/itemSlice';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import apiService from '../../app/apiService';
 
 function OrderItemsPage() {
@@ -52,9 +52,16 @@ function OrderItemsPage() {
 
     return (
         <Container sx={{ my: 3 }}>
-            <Typography variant="h4" sx={{ mb: 2, my: 3 }}>
-                Order Items
-            </Typography>
+            <Stack direction="row" spacing={2} sx={{ mb: 2, alignItems: "center", justifyContent: "space-between" }}>
+                <Typography variant="h4" sx={{ mb: 2, my: 3 }}>
+                    Order Items
+                </Typography>
+                { order.status === "pending" &&
+                    <Button component={Link} to={`/payment/${order._id}`} sx={{ backgroundColor: "orange", color: "white" }}>
+                        CHECKOUT
+                    </Button>
+                }
+            </Stack>
             <Box sx={{ position: "relative", height: 1 }}>
                 {isLoading ? (
                     <LoadingScreen />
