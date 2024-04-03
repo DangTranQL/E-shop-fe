@@ -6,6 +6,8 @@ import apiService from "../../app/apiService";
 import { Alert, Container, Stack } from "@mui/material";
 import { FSelect, FTextField, FormProvider } from "../../components/form";
 import { LoadingButton } from "@mui/lab";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CreateProductSchema = Yup.object().shape({
     title: Yup.string().required("Title is required"),
@@ -26,6 +28,8 @@ const defaultValues = {
 };
 
 function CreateProduct() {
+    const navigate = useNavigate();
+
     const methods = useForm({
         resolver: yupResolver(CreateProductSchema),
         defaultValues,
@@ -38,8 +42,11 @@ function CreateProduct() {
 
         try {
             await apiService.post("/admin/products", { title, description, category, stocks, price, image });
+            toast.success("Product created successfully");
+            navigate("/admin/products");
         } catch (error) {
             reset();
+            toast.error("Product creation failed");
             setError("responseError", error);
         }
     }

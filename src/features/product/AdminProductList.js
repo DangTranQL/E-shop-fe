@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import AdminProductCard from "./AdminProductCard";
 
-function AdminProductList({ products, loading }) {
+function AdminProductList({ products }) {
   return (
     <Grid container spacing={3} mt={1}>
       {products?.products?.map((product, index) => (

@@ -99,8 +99,6 @@ function HomePage() {
                 mb={2}
               >
                 <ProductSearch /> 
-                
-                {/* <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/> */}
 
                 <Badge badgeContent={numberOfItemsInPending} color="primary">
                   <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
@@ -124,7 +122,7 @@ function HomePage() {
                 <LoadingScreen />
               ) : (
                 <>
-                  {filteredProducts && <ProductList products={filteredProducts} />}
+                  {filteredProducts?.count > 0 ? (<ProductList products={filteredProducts} />) : (<h2>No products found</h2>)}
                 </>
               )}
             </Box>

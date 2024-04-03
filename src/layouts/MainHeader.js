@@ -21,7 +21,7 @@ function MainHeader() {
             aria-label="menu"
             sx={{ mr: 2 }}
           >
-            <Logo />
+            <Logo disabledLink={user?.role === 'admin'}/>
           </IconButton>
           <Typography variant="h6" color="inherit" component="div">
             E-shop

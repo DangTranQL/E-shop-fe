@@ -1,7 +1,7 @@
 import { Box, Grid } from "@mui/material";
 import ProductCard from "./ProductCard";
 
-function ProductList({ products, loading }) {
+function ProductList({ products }) {
   return (
     <Grid container spacing={3} mt={1}>
       {products?.products?.map((product, index) => (

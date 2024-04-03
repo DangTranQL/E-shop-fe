@@ -74,7 +74,7 @@ function ProductsPage() {
                 <LoadingScreen />
               ) : (
                 <>
-                  {filteredProducts && <AdminProductList products={filteredProducts} />}
+                  {filteredProducts?.count > 0 ? (<AdminProductList products={filteredProducts} />) : (<h2>No products found</h2>)}
                 </>
               )}
             </Box>

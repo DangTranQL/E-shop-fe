@@ -25,6 +25,7 @@ import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import useAuth from "../hooks/useAuth";
 import Badge from '@mui/material/Badge';
 import { toast } from "react-toastify";
+import { FormProvider } from "../components/form";
 
 function DetailPage() {
   const params = useParams();
@@ -62,6 +63,23 @@ function DetailPage() {
 
   return (
     <Container sx={{ my: 3 }}>
+      <Stack sx={{ flexGrow: 1 }}>
+        <FormProvider>
+          <Stack
+            spacing={5}
+            direction={{ xs: "column", sm: "row" }}
+            alignItems={{ sm: "end" }}
+            justifyContent={{ sm: "end" }}
+            mb={2}
+          >
+
+            <Badge badgeContent={addCart} color="primary">
+              <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
+            </Badge>
+            <ShoppingBagIcon onClick={() => auth?.user ? navigate(`/user/completedOrders`) : navigate('/login') }/>
+          </Stack>
+        </FormProvider>
+      </Stack>
       <Stack direction="row" spacing={10} sx={{ mb: 3 }}>
         <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 4 }}>
           <Link underline="hover" color="inherit" component={RouterLink} to="/">
@@ -69,10 +87,10 @@ function DetailPage() {
           </Link>
           <Typography color="text.primary">{selectedProduct?.product?.title}</Typography>
         </Breadcrumbs>
-        <Badge badgeContent={addCart} color="primary">
+        {/* <Badge badgeContent={addCart} color="primary">
           <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
         </Badge>
-        <ShoppingBagIcon onClick={() => auth?.user ? navigate(`/user/completedOrders`) : navigate('/login') }/>
+        <ShoppingBagIcon onClick={() => auth?.user ? navigate(`/user/completedOrders`) : navigate('/login') }/> */}
       </Stack>
       <Box sx={{ position: "relative", height: 1 }}>
         {isLoading ? (

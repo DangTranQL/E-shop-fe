@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../features/user/userSlice";
 import LoadingScreen from "../../components/LoadingScreen";
-import { Box, Container, Pagination, Stack, Typography } from "@mui/material";
+import { Box, Container, Pagination, Stack } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from "react-router-dom";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
 function UsersInfo() {
     const dispatch = useDispatch();
@@ -43,29 +44,38 @@ function UsersInfo() {
                 {isLoading ? (
                     <LoadingScreen />
                 ) : (
-                    <Stack
-                        direction={{ xs: "column" }}
-                        justifyContent="space-between"
-                        alignItems="center"
-                        sx={{ mb: 2 }}
-                    >
-                        {allUsers?.map((user) => (
-                            <Stack 
-                                direction="row"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                sx={{ mb: 2, backgroundColor: user.role === "buyer" ? "lightblue" : "orange" }} spacing={10}>
-                                <Typography>Username: {user.username}</Typography>
-                                <Typography>Email: {user.email}</Typography>
-                                <Typography>Role: {user.role}</Typography>
-                                <Typography>Address: {user.address}</Typography>
-                                <Typography>Phone: {user.phone}</Typography>
-                            </Stack>
-                        ))}
-                    </Stack>
+                    <TableContainer>
+                        <Table sx={{ minWidth: 650 }}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Username</TableCell>
+                                    <TableCell>Email</TableCell>
+                                    <TableCell>Role</TableCell>
+                                    <TableCell>Address</TableCell>
+                                    <TableCell>Phone</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {allUsers?.map((user) => (
+                                    <TableRow 
+                                        key={user.username}
+                                        sx={{ backgroundColor: user.role === "buyer" ? "lightblue" : "orange" }}
+                                    >
+                                        <TableCell>{user.username}</TableCell>
+                                        <TableCell>{user.email}</TableCell>
+                                        <TableCell>{user.role}</TableCell>
+                                        <TableCell>{user.address}</TableCell>
+                                        <TableCell>{user.phone}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 )}
                 </Box>
-                <Pagination count={Math.ceil(numberOfUsers/12)} color="primary" onChange={handleChange}/>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                    <Pagination count={Math.ceil(numberOfUsers/12)} color="primary" onChange={handleChange}/>
+                </Box>
             </Stack>
         </Container>
         );

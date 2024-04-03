@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getAllOrders } from "../../features/order/orderSlice";
 import LoadingScreen from "../../components/LoadingScreen";
-import { Box, Container, Pagination, Stack, Typography } from "@mui/material";
+import { Box, Container, Pagination, Stack } from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from "react-router-dom";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
 function OrdersInfo() {
     const dispatch = useDispatch();
@@ -37,30 +38,40 @@ function OrdersInfo() {
                             <Stack display="flex" alignItems="flex-end">
                                 <HomeIcon onClick={() => navigate("/admin")}/>
                             </Stack>
-                            <Stack
-                                direction={{ xs: "column" }}
-                                justifyContent="space-between"
-                                alignItems="center"
-                                sx={{ mb: 2 }}
-                            >
-                                {allOrders?.map((order) => (
-                                    <Stack 
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                        sx={{ mb: 2, backgroundColor: order.status === "completed" ? "lightblue" : "yellow" }} spacing={10} mt={5}>
-                                        <Typography>ID: {order._id}</Typography>
-                                        <Typography>Status: {order.status}</Typography>
-                                        <Typography>Date: {new Date(order.createdAt).toLocaleDateString()}</Typography>
-                                        <Typography>Price: {order.price}</Typography>
-                                    </Stack>
-                                ))}
-                            </Stack>
+                            <TableContainer>
+                                <Table sx={{ minWidth: 650 }}>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>ID</TableCell>
+                                            <TableCell>Status</TableCell>
+                                            <TableCell>Address</TableCell>
+                                            <TableCell>Date</TableCell>
+                                            <TableCell>Price</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {allOrders?.map((order) => (
+                                            <TableRow 
+                                                key={order._id}
+                                                sx={{ backgroundColor: order.status === "completed" ? "lightblue" : "orange" }}
+                                            >
+                                                <TableCell>{order._id}</TableCell>
+                                                <TableCell>{order.status}</TableCell>
+                                                <TableCell>{order.address}</TableCell>
+                                                <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
+                                                <TableCell>{order.price}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </Stack>
                     </Container>
                 )}
                 </Box>
-                <Pagination count={Math.ceil(numberOfOrders/12)} color="primary" onChange={handleChange}/>
+                <Box display="flex" justifyContent="center" alignItems="center">
+                    <Pagination count={Math.ceil(numberOfOrders/12)} color="primary" onChange={handleChange}/>
+                </Box>
             </Stack>
         </Container>
         );
