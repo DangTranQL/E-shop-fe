@@ -7,9 +7,11 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getOrder, updateOrder } from '../../features/order/orderSlice';
 import validator from 'validator';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 function PaymentPage () {
     const auth = useAuth();
+    const navigate = useNavigate();
     const params = useParams();
     const dispatch = useDispatch();
 
@@ -19,7 +21,8 @@ function PaymentPage () {
 
     const onSubmit = data => {
         if (Object.values(data).every(x => (x !== null && x !== ''))) {
-          dispatch(updateOrder({id: selectedOrder.order._id, status: "completed", paymentMethod: "Card"}));
+          dispatch(updateOrder({id: selectedOrder.order._id, status: "completed", address: data.address, paymentMethod: "Card"}));
+          navigate('/user/completedOrders');
         } else {
           console.log('All fields must be filled');
         }
@@ -77,6 +80,8 @@ function PaymentPage () {
                                         {errors.cvv && <span>This field is required</span>}
                                     <TextField {...register("name", { required: true })} id="name" label="Name on Card" variant="outlined" sx={{ mb: 2 }} />
                                         {errors.name && <span>This field is required</span>}
+                                    <TextField {...register("address", { required: true })} id="address" label="Address" variant="outlined" sx={{ mb: 2 }} />
+                                        {errors.address && <span>This field is required</span>}
                                     <TextField {...register("zip", { required: true })} id="zip" label="Zip Code" variant="outlined" sx={{ mb: 2 }} />
                                         {errors.zip && <span>This field is required</span>} <br/>
                                     <Button variant="contained" color="primary" type="submit">

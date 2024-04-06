@@ -80,7 +80,6 @@ export const getUsers = ({page, limit, filter}) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await apiService.get('/admin/users', { params: {page, limit, filter} });
-    console.log("getUsers", response);
     dispatch(slice.actions.getAllUsersSuccess(response.data.data));
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));

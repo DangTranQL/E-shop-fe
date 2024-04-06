@@ -8,11 +8,9 @@ import {
   Stack,
   Rating,
   Divider,
-  Breadcrumbs,
-  Link,
   Button,
 } from "@mui/material";
-import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { fCurrency } from "../utils/NumberFormat"
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -20,18 +18,11 @@ import apiService from "../app/apiService";
 import LoadingScreen from "../components/LoadingScreen";
 import { getProduct } from "../features/product/productSlice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import useAuth from "../hooks/useAuth";
-import Badge from '@mui/material/Badge';
 import { toast } from "react-toastify";
-import { FormProvider } from "../components/form";
 
 function DetailPage() {
   const params = useParams();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const auth = useAuth();
 
   const { selectedProduct, isLoading } = useSelector(
     (state) => state.product,
@@ -63,31 +54,6 @@ function DetailPage() {
 
   return (
     <Container sx={{ my: 3 }}>
-      <Stack sx={{ flexGrow: 1 }}>
-        <FormProvider>
-          <Stack
-            spacing={5}
-            direction={{ xs: "column", sm: "row" }}
-            alignItems={{ sm: "end" }}
-            justifyContent={{ sm: "end" }}
-            mb={2}
-          >
-
-            <Badge badgeContent={addCart} color="primary">
-              <ShoppingCartIcon onClick={() => auth?.user ? navigate(`/user/cart`) : navigate('/login') }/>
-            </Badge>
-            <ShoppingBagIcon onClick={() => auth?.user ? navigate(`/user/completedOrders`) : navigate('/login') }/>
-          </Stack>
-        </FormProvider>
-      </Stack>
-      <Stack direction="row" spacing={10} sx={{ mb: 3 }}>
-        <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 4 }}>
-          <Link underline="hover" color="inherit" component={RouterLink} to="/">
-            E-Shop
-          </Link>
-          <Typography color="text.primary">{selectedProduct?.product?.title}</Typography>
-        </Breadcrumbs>
-      </Stack>
       <Box sx={{ position: "relative", height: 1 }}>
         {isLoading ? (
           <LoadingScreen />

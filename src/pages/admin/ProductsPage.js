@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { filterProduct } from "../../features/product/productSlice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import AddBusinessIcon from '@mui/icons-material/AddBusiness';
-import HomeIcon from '@mui/icons-material/Home';
 
 function ProductsPage() {
     const navigate = useNavigate();
@@ -46,7 +45,7 @@ function ProductsPage() {
     }, [page, updatedProduct, numberOfProducts, dispatch, filter.category, filter.option, filter.title]);
 
     return (
-        <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
+        <Container sx={{ display: { xs: "block", sm: "flex" }, minHeight: "100vh", mt: 3 }}>
           <Stack>
             <FormProvider methods={methods}>
               <ProductFilter resetFilter={reset} />
@@ -65,11 +64,9 @@ function ProductsPage() {
 
                 <AddBusinessIcon onClick={() => navigate("/admin/products/create")} />
 
-                <HomeIcon onClick={() => navigate("/admin")}/>
-                
               </Stack>
             </FormProvider>
-            <Box sx={{ position: "relative", height: 1 }}>
+            <Box sx={{ position: "relative", height: 1, backgroundColor: "lightblue" }}>
               {isLoading ? (
                 <LoadingScreen />
               ) : (
@@ -78,7 +75,7 @@ function ProductsPage() {
                 </>
               )}
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
+            <Box display="flex" justifyContent="center" alignItems="center" mt={5}>
                 <Pagination count={Math.ceil(numberOfProducts/12)} color="primary" onChange={handleChange}/>
             </Box>
           </Stack>

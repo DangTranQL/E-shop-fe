@@ -87,7 +87,6 @@ export const updateProductDetail =
         data.image = imageUrl;
       }
       const response = await apiService.put(`/admin/products/${id}`, data);
-      console.log("update", response);
       dispatch(slice.actions.updateProductSuccess(response.data));
       toast.success("Update Detail successfully");
     } catch (error) {

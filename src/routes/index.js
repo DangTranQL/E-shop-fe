@@ -19,11 +19,12 @@ import UsersInfo from "../pages/admin/UsersInfo";
 import OrdersInfo from "../pages/admin/OrdersInfo";
 import ProductsPage from "../pages/admin/ProductsPage";
 import CreateProduct from "../pages/admin/CreateProduct";
+import OrderDetails from "../pages/admin/OrderDetails";
 
 function Router() {
   return (
     <Routes>
-      <Route element={<BlankLayout/>}>
+      <Route element={<MainLayout/>}>
         <Route index element={<HomePage/>} />
         <Route path="/" element={<HomePage />} />
         <Route path="/products/:id" element={<DetailPage />} />
@@ -45,6 +46,7 @@ function Router() {
         <Route path="/admin" element={<AdminPage/>}/>
         <Route path="/admin/accounts" element={<UsersInfo/>}/>
         <Route path="/admin/orders" element={<OrdersInfo/>}/>
+        <Route path="/admin/orders/:id" element={<OrderDetails/>}/>
         <Route path="/admin/products" element={<ProductsPage/>}/>
         <Route path="/admin/products/create" element={<CreateProduct/>}/>
       </Route>

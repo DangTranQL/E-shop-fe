@@ -43,8 +43,6 @@ function AdminProductCard({ product }) {
     const onSubmit = async (data) => {
         const { title, description, category, stocks, price, image } = data;
 
-        console.log("data", data);
-
         try {
             dispatch(updateProductDetail({ id: product._id , title, description, category, stocks, price, image }));
         } catch (error) {
@@ -62,7 +60,7 @@ function AdminProductCard({ product }) {
     <>
     {isEditing ? (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-            <Stack spacing={2.5}>
+            <Stack direction="column" spacing={2}>
                 <FTextField name="title" defaultValue={product.title} label="Title"/>
                 <FTextField name="description" defaultValue={product.description} label="Description"/>
                 <FSelect name="category">
@@ -89,7 +87,7 @@ function AdminProductCard({ product }) {
             </Stack>
         </FormProvider>
         ) : (
-        <Card sx={{ width: 200, height: 250 }}>
+        <Card sx={{ width: { xs: '100%', sm: 200 }, height: 250 }}>
             <CardActionArea>
                 <Box display="flex" justifyContent="center" alignItems="center">
                     <img src={product.image} alt={product.title} height="120"/>
@@ -102,8 +100,11 @@ function AdminProductCard({ product }) {
                         direction="row"
                         spacing={0.5}
                         alignItems="center"
-                        justifyContent="flex-end"
+                        justifyContent="space-between"
                     >
+                        <Typography variant="subtitle1">
+                        Stocks: {product.stocks}
+                        </Typography>
                         <Typography variant="subtitle1">
                         {fCurrency(product.price)}
                         </Typography>

@@ -3,13 +3,10 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../features/user/userSlice";
 import LoadingScreen from "../../components/LoadingScreen";
 import { Box, Container, Pagination, Stack } from "@mui/material";
-import HomeIcon from '@mui/icons-material/Home';
-import { useNavigate } from "react-router-dom";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 
 function UsersInfo() {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [page, setPage] = useState(1);
     const limit = 12;
 
@@ -23,23 +20,12 @@ function UsersInfo() {
     );
 
     useEffect(() => {
-        console.log("filter", page, limit);
         dispatch(getUsers({page, limit}));
     }, [page, dispatch]);
 
     return (
         <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
             <Stack sx={{ flexGrow: 1 }}>
-                <Stack
-                    spacing={2}
-                    direction={{ xs: "column", sm: "row" }}
-                    alignItems={{ sm: "center" }}
-                    justifyContent="right"
-                    mb={2}
-                >
-
-                    <HomeIcon onClick={() => navigate("/admin")}/>
-                </Stack>
                 <Box sx={{ position: "relative", height: 1 }}>
                 {isLoading ? (
                     <LoadingScreen />
@@ -73,7 +59,7 @@ function UsersInfo() {
                     </TableContainer>
                 )}
                 </Box>
-                <Box display="flex" justifyContent="center" alignItems="center">
+                <Box display="flex" justifyContent="center" alignItems="center" mt={5}>
                     <Pagination count={Math.ceil(numberOfUsers/12)} color="primary" onChange={handleChange}/>
                 </Box>
             </Stack>

@@ -7,7 +7,7 @@ function ProductSearch() {
   return (
     <FTextField
       name="title"
-      sx={{ width: 700 }}
+      sx={{ width: { xs: '100%', sm: 700 } }}
       size="small"
       InputProps={{
         startAdornment: (

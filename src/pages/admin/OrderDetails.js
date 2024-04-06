@@ -6,7 +6,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getAllItems } from '../../features/orderItem/itemSlice';
 import { useParams } from 'react-router-dom';
 
-function OrderItemsPage() {
+function OrderDetails() {
     const userId = useAuth().user?._id;
     const dispatch = useDispatch();
     const params = useParams();
@@ -74,4 +74,4 @@ function OrderItemsPage() {
 };
 
 
-export default OrderItemsPage;
+export default OrderDetails;

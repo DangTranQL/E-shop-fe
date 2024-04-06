@@ -11,6 +11,7 @@ const initialState = {
   completedOrders: null,
   numberOfOrders: 0,
   numberOfItemsInPending: 0,
+  pendingItems: null,
   allOrders: null,
 };
 
@@ -47,6 +48,7 @@ const slice = createSlice({
       state.error = null;
 
       state.pendingOrder = action.payload.pendingOrder;
+      state.pendingItems = action.payload.orderItems;
       state.numberOfItemsInPending = action.payload.numberOfItems;
     },
 
@@ -76,6 +78,7 @@ export const updateOrder =
   ({
     id,
     status,
+    address,
     paymentMethod,
   }) =>
   async (dispatch) => {
@@ -83,6 +86,7 @@ export const updateOrder =
     try {
       const data = {
         status,
+        address,
         paymentMethod,
       };
       
@@ -119,7 +123,6 @@ export const getOrder = (id) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await apiService.get(`/orders/${id}`);
-    console.log(id);
     dispatch(slice.actions.getOrderSuccess(response.data.data));
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));
@@ -130,7 +133,6 @@ export const getAllOrders = ({page, limit}) => async (dispatch) => {
   dispatch(slice.actions.startLoading());
   try {
     const response = await apiService.get('/admin/orders', { params: {page, limit} });
-    console.log("getAllOrders", response);
     dispatch(slice.actions.getAllOrdersSuccess(response.data.data));
   } catch (error) {
     dispatch(slice.actions.hasError(error.message));

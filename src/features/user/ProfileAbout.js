@@ -2,6 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Link, Card, Typography, CardHeader, Stack, Box } from "@mui/material";
 import PinDropIcon from "@mui/icons-material/PinDrop";
 import EmailIcon from "@mui/icons-material/Email";
+import Phone from "@mui/icons-material/Phone";
 
 const IconStyle = styled(Box)(({ theme }) => ({
   width: 20,
@@ -27,9 +28,16 @@ function ProfileAbout({ profile }) {
           </IconStyle>
           <Typography variant="body2">
             <Link component="span" variant="subtitle2" color="text.primary">
-              {address} {phone}
+              {address}
             </Link>
           </Typography>
+        </Stack>
+
+        <Stack direction="row">
+          <IconStyle>
+            <Phone />
+          </IconStyle>
+          <Typography variant="body2">{phone}</Typography>
         </Stack>
 
         <Stack direction="row">

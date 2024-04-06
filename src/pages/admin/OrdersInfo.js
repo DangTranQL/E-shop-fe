@@ -3,9 +3,10 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getAllOrders } from "../../features/order/orderSlice";
 import LoadingScreen from "../../components/LoadingScreen";
 import { Box, Container, Pagination, Stack } from "@mui/material";
-import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from "react-router-dom";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
+import { updateOrder } from "../../features/order/orderSlice";
 
 function OrdersInfo() {
     const dispatch = useDispatch();
@@ -22,6 +23,10 @@ function OrdersInfo() {
         shallowEqual
     );
 
+    const updateOrderStatus = (data) => {
+        dispatch(updateOrder(data));
+    };
+
     useEffect(() => {
         dispatch(getAllOrders({page, limit}));
     }, [page, dispatch]);
@@ -35,9 +40,6 @@ function OrdersInfo() {
                 ) : (
                     <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
                         <Stack sx={{ flexGrow: 1 }}>
-                            <Stack display="flex" alignItems="flex-end">
-                                <HomeIcon onClick={() => navigate("/admin")}/>
-                            </Stack>
                             <TableContainer>
                                 <Table sx={{ minWidth: 650 }}>
                                     <TableHead>
@@ -47,6 +49,7 @@ function OrdersInfo() {
                                             <TableCell>Address</TableCell>
                                             <TableCell>Date</TableCell>
                                             <TableCell>Price</TableCell>
+                                            <TableCell>Details</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -56,10 +59,21 @@ function OrdersInfo() {
                                                 sx={{ backgroundColor: order.status === "completed" ? "lightblue" : "orange" }}
                                             >
                                                 <TableCell>{order._id}</TableCell>
-                                                <TableCell>{order.status}</TableCell>
+                                                <TableCell>
+                                                    <Select
+                                                        value={order.status}
+                                                        onChange={(event) => updateOrderStatus({id: order._id, status: event.target.value, address: order.address, paymentMethod: order.paymentMethod})}
+                                                    >
+                                                        <MenuItem value={"pending"}>Pending</MenuItem>
+                                                        <MenuItem value={"completed"}>Completed</MenuItem>
+                                                    </Select>
+                                                </TableCell>
                                                 <TableCell>{order.address}</TableCell>
                                                 <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                                                 <TableCell>{order.price}</TableCell>
+                                                <TableCell>
+                                                    <button onClick={() => navigate(`/admin/orders/${order._id}`)}>Details</button>
+                                                </TableCell>
                                             </TableRow>
                                         ))}
                                     </TableBody>
@@ -69,7 +83,7 @@ function OrdersInfo() {
                     </Container>
                 )}
                 </Box>
-                <Box display="flex" justifyContent="center" alignItems="center">
+                <Box display="flex" justifyContent="center" alignItems="center" mt={5}>
                     <Pagination count={Math.ceil(numberOfOrders/12)} color="primary" onChange={handleChange}/>
                 </Box>
             </Stack>

@@ -7,7 +7,7 @@ import {
 const PRIMARY = {
   lighter: "#FFD07F",
   light: "#FDA65D",
-  main: "#FF8243",
+  main: "#191970",
   dark: "#E26A2C",
   darker: "#cc571f",
   contrastText: "#FFF",
@@ -29,13 +29,42 @@ const SUCCESS = {
   contrastText: "#FFF",
 };
 
+const getDesignTokens = (mode: PaletteMode) => ({
+  palette: {
+    mode,
+    ...(mode === "light"
+      ? {
+          primary: PRIMARY,
+          secondary: SECONDARY,
+          success: SUCCESS,
+        }
+      : {
+          primary: "#000000",
+          secondary: "B8860B",
+          success: "A9A9A9",
+        }),
+  },
+  shape: { borderRadius: 8 },
+});
+
 function ThemeProvider({ children }) {
   const themeOptions = {
-    palette: {
-      primary: PRIMARY,
-      secondary: SECONDARY,
-      success: SUCCESS,
-    },
+    // palette: {
+    //   mode,
+    //   ...(mode === "light"
+    //     ? {
+    //         primary: PRIMARY,
+    //         secondary: SECONDARY,
+    //         success: SUCCESS,
+    //       }
+    //     : {
+    //         primary: "#000000",
+    //         secondary: "B8860B",
+    //         success: "A9A9A9",
+    //       }),
+    // },
+
+    ...getDesignTokens("light"),
     shape: { borderRadius: 8 },
   };
 
