@@ -13,6 +13,7 @@ const initialState = {
   numberOfItemsInPending: 0,
   pendingItems: null,
   allOrders: null,
+  statusChange: null,
 };
 
 const slice = createSlice({
@@ -34,6 +35,18 @@ const slice = createSlice({
 
       const updatedOrder = action.payload;
       state.updatedOrder = updatedOrder;
+      state.numberOfOrders = state.numberOfOrders + 1;
+      state.numberOfItemsInPending = 0;
+      state.pendingOrder = null;
+      state.pendingItems = null;
+    },
+
+    adminUpdateOrderSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+
+      const status = action.payload.order.status;
+      state.statusChange = status;
     },
 
     getOrderSuccess(state, action) {
@@ -68,6 +81,14 @@ const slice = createSlice({
       const { orders, count } = action.payload;
       state.allOrders = orders;
       state.numberOfOrders = count;
+    },
+
+    addCartSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+
+      state.pendingOrder = action.payload.order;
+      state.numberOfItemsInPending = action.payload.numItems;
     },
   },
 });
@@ -138,3 +159,40 @@ export const getAllOrders = ({page, limit}) => async (dispatch) => {
     dispatch(slice.actions.hasError(error.message));
   }
 };
+
+export const addCart = (product) => async (dispatch) => {
+  dispatch(slice.actions.startLoading());
+  try {
+    const response = await apiService.post('/orders/addCart', product);
+    dispatch(slice.actions.addCartSuccess(response.data.data));
+    toast.success("Add to cart successfully");
+  } catch (error) {
+    dispatch(slice.actions.hasError(error.message));
+    toast.error("Add to cart failed");
+  }
+};
+
+export const adminUpdateOrder =
+  ({
+    id,
+    status,
+    address,
+    paymentMethod,
+  }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const data = {
+        status,
+        address,
+        paymentMethod,
+      };
+      
+      const response = await apiService.patch(`/orders/${id}`, data);
+      dispatch(slice.actions.adminUpdateOrderSuccess(response.data.data));
+      toast.success("Update Order successfully");
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };

@@ -32,7 +32,7 @@ const SUCCESS = {
 const getDesignTokens = (mode: PaletteMode) => ({
   palette: {
     mode,
-    ...(mode === "light"
+    ...(mode === "dark"
       ? {
           primary: PRIMARY,
           secondary: SECONDARY,
@@ -49,21 +49,6 @@ const getDesignTokens = (mode: PaletteMode) => ({
 
 function ThemeProvider({ children }) {
   const themeOptions = {
-    // palette: {
-    //   mode,
-    //   ...(mode === "light"
-    //     ? {
-    //         primary: PRIMARY,
-    //         secondary: SECONDARY,
-    //         success: SUCCESS,
-    //       }
-    //     : {
-    //         primary: "#000000",
-    //         secondary: "B8860B",
-    //         success: "A9A9A9",
-    //       }),
-    // },
-
     ...getDesignTokens("light"),
     shape: { borderRadius: 8 },
   };

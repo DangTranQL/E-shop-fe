@@ -56,7 +56,7 @@ function MainHeader() {
 
   useEffect(() => {
     dispatch(getPendingOrder());
-  }, [dispatch, numberOfItemsInPending]);
+  }, [dispatch, numberOfItemsInPending, navigate]);
 
   return (
     <Box>

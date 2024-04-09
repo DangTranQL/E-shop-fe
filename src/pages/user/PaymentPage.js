@@ -19,9 +19,9 @@ function PaymentPage () {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const onSubmit = data => {
+    const onSubmit = async(data) => {
         if (Object.values(data).every(x => (x !== null && x !== ''))) {
-          dispatch(updateOrder({id: selectedOrder.order._id, status: "completed", address: data.address, paymentMethod: "Card"}));
+          await dispatch(updateOrder({id: selectedOrder.order._id, status: "completed", address: data.address, paymentMethod: "Card"}));
           navigate('/user/completedOrders');
         } else {
           console.log('All fields must be filled');

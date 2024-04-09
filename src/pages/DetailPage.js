@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Card,
   Grid,
@@ -14,11 +14,10 @@ import { useParams } from "react-router-dom";
 import { fCurrency } from "../utils/NumberFormat"
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-import apiService from "../app/apiService";
 import LoadingScreen from "../components/LoadingScreen";
 import { getProduct } from "../features/product/productSlice";
+import { addCart } from "../features/order/orderSlice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
 
 function DetailPage() {
   const params = useParams();
@@ -34,15 +33,11 @@ function DetailPage() {
     shallowEqual
   );
 
-  const [addCart, setAddCart] = useState(numberOfItemsInPending);
-
   const addCartHandler = async () => {
-    setAddCart(addCart + 1);
     try {
-      await apiService.post('/orders/addCart', {productID: selectedProduct.product._id, title: selectedProduct.product.title, quantity: 1, itemPrice: selectedProduct.product.price, image: selectedProduct.product.image});
-      toast.success("Add to cart successfully");
+      dispatch(addCart({productID: selectedProduct.product._id, title: selectedProduct.product.title, quantity: 1, itemPrice: selectedProduct.product.price, image: selectedProduct.product.image}));
     } catch (error) {
-      toast.error("Add to cart failed");
+      console.error(error);
     }
   };
 
@@ -50,7 +45,7 @@ function DetailPage() {
     if (params.id) {
       dispatch(getProduct(params.id));
     }
-  }, [dispatch, params.id]);
+  }, [dispatch, params.id, numberOfItemsInPending]);
 
   return (
     <Container sx={{ my: 3 }}>

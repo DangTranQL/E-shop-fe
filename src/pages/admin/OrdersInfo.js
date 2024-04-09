@@ -6,7 +6,7 @@ import { Box, Container, Pagination, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { MenuItem, Select } from "@mui/material";
-import { updateOrder } from "../../features/order/orderSlice";
+import { adminUpdateOrder } from "../../features/order/orderSlice";
 
 function OrdersInfo() {
     const dispatch = useDispatch();
@@ -18,18 +18,18 @@ function OrdersInfo() {
         setPage(value);
     };
 
-    const {allOrders, numberOfOrders, isLoading} = useSelector(
+    const {allOrders, numberOfOrders, statusChange, isLoading} = useSelector(
         (state) => state.order,
         shallowEqual
     );
 
     const updateOrderStatus = (data) => {
-        dispatch(updateOrder(data));
+        dispatch(adminUpdateOrder(data));
     };
 
     useEffect(() => {
         dispatch(getAllOrders({page, limit}));
-    }, [page, dispatch]);
+    }, [page, dispatch, statusChange]);
 
     return (
         <Container sx={{ display: "flex", minHeight: "100vh", mt: 3 }}>
