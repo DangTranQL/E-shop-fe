@@ -63,7 +63,7 @@ function HomePage() {
 
               </Stack>
             </FormProvider>
-            <Box sx={{ position: "relative", height: 1, backgroundColor: "lightblue" }}>
+            <Box sx={{ position: "relative", height: 1}}>
               {isLoading ? (
                 <LoadingScreen />
               ) : (
@@ -73,7 +73,7 @@ function HomePage() {
               )}
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center" mt={5}>
-                <Pagination count={Math.ceil(numberOfProducts/12)} color="primary" onChange={handleChange}/>
+                <Pagination count={Math.ceil(numberOfProducts/12)} color="secondary" onChange={handleChange}/>
             </Box>
           </Stack>
         </Container>

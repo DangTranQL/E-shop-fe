@@ -84,7 +84,7 @@ function OrdersInfo() {
                 )}
                 </Box>
                 <Box display="flex" justifyContent="center" alignItems="center" mt={5}>
-                    <Pagination count={Math.ceil(numberOfOrders/12)} color="primary" onChange={handleChange}/>
+                    <Pagination count={Math.ceil(numberOfOrders/12)} color="secondary" onChange={handleChange}/>
                 </Box>
             </Stack>
         </Container>

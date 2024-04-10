@@ -69,7 +69,7 @@ function OrdersPage() {
                     </TableContainer>
 
                     <Box display="flex" justifyContent="center" alignItems="center" mt={5}>
-                        <Pagination count={Math.ceil(numberOfOrders/10)} color="primary" onChange={handleChange}/>
+                        <Pagination count={Math.ceil(numberOfOrders/10)} color="secondary" onChange={handleChange}/>
                     </Box>
                 </Box>
             )}
