@@ -31,7 +31,7 @@ function AdminProductCard({ product }) {
         image: product.image,
     };
 
-    const buttonStyle = {backgroundColor: 'orange', color: 'white', fontSize: '0.7em', weight: 600};
+    const buttonStyle = {backgroundColor: 'blue', color: 'white', fontSize: '0.7em', weight: 600};
 
     const methods = useForm({
         resolver: yupResolver(ProductSchema),
@@ -78,10 +78,10 @@ function AdminProductCard({ product }) {
                 <FTextField type="number" name="stocks" defaultValue={product.stocks} label="Stocks"/>
                 <FTextField type="number" name="price" defaultValue={product.price} label="Price"/>
                 <FTextField name="image" defaultValue={product.image} label="Image"/>
-                <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
+                <LoadingButton style={buttonStyle} fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
                     UPDATE
                 </LoadingButton>
-                <LoadingButton fullWidth size="large" variant="contained" onClick={() => setIsEditing(false)}>
+                <LoadingButton style={buttonStyle} fullWidth size="large" variant="contained" onClick={() => setIsEditing(false)}>
                     CANCEL
                 </LoadingButton>
             </Stack>
@@ -110,7 +110,7 @@ function AdminProductCard({ product }) {
                         </Typography>
                     </Stack>
                 </CardContent>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Box display="flex" justifyContent="space-between" alignItems="center" >
                     <Button style={buttonStyle} onClick={handleEdit}>Edit</Button>
                     <Button style={buttonStyle} onClick={() => dispatch(deleteProduct(product._id))}>Delete</Button>
                 </Box>
