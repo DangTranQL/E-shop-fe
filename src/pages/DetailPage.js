@@ -121,7 +121,7 @@ function DetailPage() {
           )}
       </Box>
       <Box sx={{ mt: 3 }}>
-        <Button variant="contained" color="primary" size="large" disabled={selectedProduct?.product?.stocks === 0} onClick={addCartHandler}>Add to Cart</Button>
+        <Button variant="contained" color="secondary" size="large" disabled={selectedProduct?.product?.stocks === 0} onClick={addCartHandler}>Add to Cart</Button>
       </Box>
     </Container>
   );

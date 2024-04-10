@@ -87,9 +87,12 @@ function CartPage() {
                 )}
             </Box>
             </>) : (
-                <Typography variant="h4" sx={{ mb: 2, my: 3 }}>
-                    You have no order
-                </Typography>
+                <>
+                    <Typography variant="h4" sx={{ mb: 2, my: 3 }}>
+                        You have no order
+                    </Typography>
+                    <Button component={Link} to="/" sx={{ backgroundColor: "lightgreen" }}>Go Back to Shopping</Button>
+                </>
             )}
         </Container>
     );
